@@ -1,0 +1,34 @@
+* {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+}
+
+body,
+button,
+input {
+     font-family: monospace;
+}
+
+body {
+     max-height: 100vh;
+     max-width: 100vw;
+     /* overflow: hidden; */
+}
+
+.loader {
+     max-inline-size: 100%;
+}
+
+.title-container {
+     h1 {
+          color: white;
+     }
+}
+.avatars {
+     display: flex;
+     gap: 2rem;
+     .avatar {
+          
+     }
+}
