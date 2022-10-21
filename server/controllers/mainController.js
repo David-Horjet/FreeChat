@@ -1,7 +1,7 @@
 const home = (req, res) => {
      res.json({
           status: true,
-          message: "PingFly's Api is fully functional 😜😎",
+          message: "FreeChat's Api is fully functional 😜😎",
      });
 }
 

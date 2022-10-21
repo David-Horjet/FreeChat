@@ -4,9 +4,10 @@ const userController = require("../controllers/userController");
 const { loginRequired } = require("../middlewares/auth");
 
 userRouter.get('/users', userController.allUsers);
-userRouter.get('/users/:id', userController.idUsers);
+userRouter.get('/all/:id', userController.idUsers);
 userRouter.post('/users/:id', loginRequired);
-userRouter.get('/:id', userController.getUser);
+userRouter.get('/:username', userController.getUser);
+userRouter.put('/settings/:id', userController.updateUser);
 
 module.exports = {
      userRouter

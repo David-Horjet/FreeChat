@@ -55,19 +55,6 @@ function Chat() {
   // }, [user])
 
   useEffect(() => {
-    if(user) {
-      async function authUser() {
-      
-        console.log(user)
-  
-        const data = await axios.get(`${userRoute}/${user._id}`)
-        console.log(data)
-      } 
-      authUser()
-    }
-  }, [user])
-
-  useEffect(() => {
     if (user) {
       socket.current = io(host);
       socket.current.emit("add-user", user._id);

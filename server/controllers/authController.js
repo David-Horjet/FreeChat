@@ -131,19 +131,17 @@ const setImage = async (req, res, next) => {
 
           const userId = req.params.id;
           const image = body.image;
-          console.log(image);
+          const about = body.about;
           const userData = await Users.findByIdAndUpdate(userId, {
                new: true,
                image,
-               isImageSet: true,
+               about
           });
-
-          console.log(userData);
 
           return res.json({
                status: true,
                msg: "Profile Image Successfully Set",
-               userData: userData
+               data: userData
           });
      })
 }

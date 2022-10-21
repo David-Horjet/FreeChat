@@ -17,7 +17,9 @@ const userSchema = new mongoose.Schema({
           type: String,
           default: "public/uploads/person-icon-svg-1.jpg",
      },
-
+     about: {
+          type: String,
+     },
      token: {
           type: String
      },
