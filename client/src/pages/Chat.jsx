@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
@@ -8,18 +8,19 @@ import axios from "axios";
 import { io } from "socket.io-client";
 // import { useNavigate } from "react-router-dom";
 import SideNav from "../components/SideNav";
+import { Context } from "../context/Context";
 // import authAxios from "../utils/Axios"
 
 function Chat() {
   const socket = useRef();
-  // const navigate = useNavigate();
 
+  const {user} = useContext(Context);
   const [contacts, setContacts] = useState([]);
-  const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem("User");
-    const initialValue = JSON.parse(saved);
-    return initialValue || "";
-  });
+  // const [user, setCurrentUser] = useState(() => {
+  //   const saved = localStorage.getItem("User");
+  //   const initialValue = JSON.parse(saved);
+  //   return initialValue || "";
+  // });
   const [currentChat, setCurrentChat] = useState(undefined);
 
   useEffect(() => {
@@ -38,54 +39,51 @@ function Chat() {
   //   getUser()
   // }, [navigate]);
 
-  console.log(currentUser)
+  // useEffect(() => {
+  //   if(user) {
+  //     async function authUser() {
+  //       const accessToken = localStorage.getItem("token");
+  //       const data = await axios.post(`${userRoute}/${user._id}`, {
+  //         headers: {
+  //           "Authorization" : `Bearer ${accessToken}`
+  //         }
+  //       });
+  //       console.log(data)
+  //     } 
+  //     authUser()
+  //   }
+  // }, [user])
 
   useEffect(() => {
-    if(currentUser) {
-      async function authUser() {
-        const accessToken = localStorage.getItem("token");
-        const data = await axios.post(`${userRoute}/${currentUser._id}`, {
-          headers: {
-            "Authorization" : `Bearer ${accessToken}`
-          }
-        });
-        console.log(data)
-      } 
-      authUser()
-    }
-  }, [currentUser])
-
-  useEffect(() => {
-    if(currentUser) {
+    if(user) {
       async function authUser() {
       
-        console.log(currentUser)
+        console.log(user)
   
-        const data = await axios.get(`${userRoute}/${currentUser._id}`)
+        const data = await axios.get(`${userRoute}/${user._id}`)
         console.log(data)
       } 
       authUser()
     }
-  }, [currentUser])
+  }, [user])
 
   useEffect(() => {
-    if (currentUser) {
+    if (user) {
       socket.current = io(host);
-      socket.current.emit("add-user", currentUser._id);
+      socket.current.emit("add-user", user._id);
     }
-  }, [currentUser]);
+  }, [user]);
 
   useEffect(() => {
     async function allUsers() {
-      if (currentUser) {
-        const data = await axios.get(`${usersRoute}/${currentUser._id}`);
-        console.log(data);
+      if (user) {
+        const data = await axios.get(`${usersRoute}/${user._id}`);
   
         setContacts(data.data);
       }
     }
     allUsers();
-  }, [currentUser]);
+  }, [user]);
 
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
@@ -98,19 +96,19 @@ function Chat() {
           <div className="chat-container">
             <div className="row">
               <SideNav
-                currentUser={currentUser}
+                user={user}
               />
               <Contacts
                 contacts={contacts}
-                currentUser={currentUser}
+                user={user}
                 changeChat={handleChatChange}
               />
               {currentChat === undefined ? (
-                <Welcome currentUser={currentUser} />
+                <Welcome user={user} />
               ) : (
                 <ChatContainer
                   currentChat={currentChat}
-                  currentUser={currentUser}
+                  user={user}
                   socket={socket}
                 />
               )}

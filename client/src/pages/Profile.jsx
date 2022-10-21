@@ -1,24 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-// import { host } from "../utils/APIRoutes";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import ProfileContainer from "../components/ProfileContainer";
+import { Context } from "../context/Context";
+import { userRoute } from "../utils/APIRoutes";
+import axios from "axios";
 
 function Profile() {
-  // const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const username = location.pathname.split("/")[1];
+  const { user } = useContext(Context);
 
-  const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem("User");
-    const initialValue = JSON.parse(saved);
-    return initialValue || "";
-  });
-
+  const [profile, setProfile] = useState("");
 
   useEffect(() => {
     document.title = "Profile - FreeChat";
   });
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const res = await axios.get(`${userRoute}/${username}`);
+      if(res.data.status === false) {
+        navigate("*")
+      } 
+      if(res.data.status === true) {
+        setProfile(res.data.user)
+      } 
+    }
+    fetchUserData();
+  }, [username, navigate]);
 
   return (
     <>
@@ -26,12 +38,8 @@ function Profile() {
         <div className="chat wrapper">
           <div className="chat-container">
             <div className="row">
-              <SideNav
-                currentUser={currentUser}
-              />
-              <ProfileContainer
-                currentUser={currentUser}
-              />
+              <SideNav user={user} />
+              <ProfileContainer profile={profile} user={user} />
             </div>
           </div>
         </div>

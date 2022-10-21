@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Context } from "../context/Context";
 import axios from "axios";
 import { loginRoute } from "../utils/APIRoutes";
 import { DiSenchatouch } from "react-icons/di";
@@ -13,7 +14,7 @@ function Login() {
     username: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const { dispatch, isFetching } = useContext(Context);
   const toastOptions = {
     position: "top-right",
     autoClose: "8000",
@@ -30,26 +31,24 @@ function Login() {
     event.preventDefault();
     try {
       if (handleValidation()) {
-        setIsLoading(true);
+        dispatch({ type: "LOGIN_START" });
         const { password, username } = values;
-        console.log({password, username});
-        const { data } = await axios.post(loginRoute, {
+        const res = await axios.post(loginRoute, {
           username,
           password,
         });
-        if (data.status === false) {
-          toast.error(data.msg, toastOptions);
-          setIsLoading(false);
+        if (res.data.status === false) {
+          toast.error(res.data.msg, toastOptions);
+          isFetching(false);
         }
-        if (data.status === true) {
-          localStorage.setItem("User", JSON.stringify(data.user));
-          localStorage.setItem("token", JSON.stringify(data.token));
+        if (res.data.status === true) {
+          dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
+          localStorage.setItem("token", JSON.stringify(res.data.token));
           navigate("/");
         }
       }
     } catch (error) {
-      toast.error("Network Error, Check your network connection and try again", toastOptions);
-      setIsLoading(false);
+      dispatch({ type: "LOGIN_FAILURE" });
     }
   };
 
@@ -57,9 +56,11 @@ function Login() {
     const { password, username } = values;
     if (username === "") {
       toast.error("Username is required", toastOptions);
+      isFetching(false);
       return false;
     } else if (password === "") {
       toast.error("Passord is required", toastOptions);
+      isFetching(false);
       return false;
     }
     return true;
@@ -91,12 +92,7 @@ function Login() {
             name="password"
             onChange={(e) => handleChange(e)}
           />
-          {!isLoading && <button type="submit">Log in</button>}
-          {isLoading && (
-            <button disabled type="submit">
-              Finding Account...
-            </button>
-          )}
+          <button type="submit" disabled={isFetching}>Log in</button>
           <span>
             Don't have an account ? <Link to={"/register"}>Register</Link>
           </span>
@@ -164,6 +160,10 @@ const FormContainer = styled.div`
       transition: 0.5s ease-in-out;
       &:hover {
         background-color: #4e0eff;
+      }
+      &:disabled {
+        cursor: not-allowed;
+        background-color: #946dff;
       }
     }
     span {

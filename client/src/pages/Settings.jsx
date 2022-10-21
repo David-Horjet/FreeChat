@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 // import { host } from "../utils/APIRoutes";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import SettingsContainer from "../components/SettingsContainer";
+import { Context } from "../context/Context";
 
-function Settings() {
-  // const navigate = useNavigate();
-
-  const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem("User");
-    const initialValue = JSON.parse(saved);
-    return initialValue || "";
-  });
-
+function Settings({switchTheme}) {
+  const {user} = useContext(Context);
 
   useEffect(() => {
     document.title = "Settings - FreeChat";
@@ -27,10 +21,11 @@ function Settings() {
           <div className="chat-container">
             <div className="row">
               <SideNav
-                currentUser={currentUser}
+                user={user}
               />
               <SettingsContainer
-                currentUser={currentUser}
+                switchTheme={switchTheme}
+                user={user}
               />
             </div>
           </div>

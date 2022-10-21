@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { host } from "../utils/APIRoutes";
-import { BsSearch } from "react-icons/bs";
+import { BsFillGridFill, BsSearch } from "react-icons/bs";
 function Contacts({ contacts, currentUser, changeChat }) {
-  console.log(contacts);
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
 
@@ -22,15 +21,21 @@ function Contacts({ contacts, currentUser, changeChat }) {
     changeChat(contact);
   };
 
-  // console.log(currentUserName);
-
   return (
     <>
-      <Container className="col-lg-3 col-xxl-3">
-        <div className="contacts col-lg-12 col-xxl-12">
-          <nav className="navbar navbar-light navbar-expand-lg mx-0">
+      <Container className="contacts-container">
+        <div className="contacts col-sm-12">
+          <nav className="navbar-expand-lg mx-0">
             <div className="offcanvas offcanvas-start" id="offcanvasNavbar">
-              <div className="head">
+              <div className="card-head">
+                <div className=" d-flex justify-content-between align-items-center">
+                  <h1 className="h5 mb-0">Chats</h1>
+                  <div className="dropend position-relative">
+                    <BsFillGridFill />
+                  </div>
+                </div>
+              </div>
+              <div className="head pb-3">
                 <form className="position-relative">
                   <input
                     className="form-control py-2"
@@ -47,8 +52,8 @@ function Contacts({ contacts, currentUser, changeChat }) {
                 </form>
               </div>
               <div className="offcanvas-body p-0">
-                <div className="card card-chat-list rounded-end-lg-0 card-body border-end-lg-0 rounded-top-0">
-                  <div className="h-100">
+                <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
+                  <div className="h-100 custom-scrollbar">
                     <div className="chat-tab-list custom-scrollbar">
                       <ul className="nav flex-column nav-pills nav-pills-soft">
                         {contacts.map((contact, index) => {
@@ -102,9 +107,18 @@ function Contacts({ contacts, currentUser, changeChat }) {
 }
 
 const Container = styled.div`
+  flex: 0 0 auto;
+  width: 25%;
+  background-color: var(--primary-color);
+  .custom-scrollbar::-webkit-scrollbar{width: 5px;}
+  .custom-scrollbar::-webkit-scrollbar-thumb{background: var(--faded-secondary-color)}
+  hr {
+    background-color: var(--faded-secondary-color);
+    color: var(--faded-secondary-color);
+  }
+
   .header {
-    background-color: var(--primary-color);
-    border: 1px solid #fff;
+    background-color: var(--faded-primary-color);
   }
 
   .side-navbar {
@@ -128,7 +142,6 @@ const Container = styled.div`
   }
 
   .settings {
-    padding: 20px 0;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -174,47 +187,71 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 100%;
+    object-fit: cover;
   }
 
   .contacts {
     height: 100%;
   }
 
-  .head {
-    padding: 1rem 1rem;
+  .card-head {
+    padding: 1.2rem;
+    h1 {
+      color: var(--secondary-color);
+    }
+    .dropend {
+      svg {
+        color: var(--secondary-color);
+      }
+    }
   }
+
+  .head {
+    padding: 0rem 1rem;
+    .form-control {
+      background-color: var(--faded-primary-color);
+      border: none;
+      color: var(--secondary-color);
+      border-radius: 10px;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .offcanvas-body {
+    height: 80vh;
 
   .navbar {
     height: 100%;
     padding: 0;
   }
-  .navbar ul {
+  ul {
     gap: 10px;
   }
-  .navbar ul li {
+  ul li {
     font-size: 16px;
     border-radius: 5px;
     padding: 5px 10px;
   }
-  .navbar ul .selected {
-    background-color: var(--faded-primary-color);
+  ul .selected button {
+    background: var(--gradient);
   }
-  .navbar button {
-    padding: 5px;
+  button {
+    padding: 8px;
+    background-color: var(--faded-primary-color);
+    border-radius: 10px;
+    .small {
+      color: var(--faded-secondary-color) !important;
+    }
   }
   .offcanvas {
-    background-color: var(--primary-color);
-    border: 1px solid #fff;
     height: 100%;
     overflow: auto;
+    .card {
+      border: none;
+    }
   }
-
-  .navbar .offcanvas::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  .navbar .offcanvas::-webkit-scrollbar-thumb {
-    background-color: #2f2f2f;
   }
 
   h6 {

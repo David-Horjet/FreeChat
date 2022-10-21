@@ -6,17 +6,17 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosPeople, IoIosChatboxes } from "react-icons/io";
 import { BsPersonBadge, BsStarFill } from "react-icons/bs";
 
-function SideNav({ currentUser }) {
+function SideNav({ user }) {
   return (
-    <Container className="navbar-col col-lg-1 col-xxl-1">
+    <Container className="sideNav">
       <nav className="side-navbar">
-        <div className="w-100 d-flex justify-content-center">
-          <Link to={"/profile"} className="avatar">
-            <img src={`${host}/${currentUser.image}`} alt="" />
+        <div className="d-flex justify-content-center">
+          <Link to={`/${user.username}`} className="avatar">
+            <img src={`${host}/${user.image}`} alt="" />
           </Link>
         </div>
         <ul>
-          <li>
+          <li className="active">
             <Link to={"/"}>
               <IoIosChatboxes />{" "}
             </Link>
@@ -31,7 +31,7 @@ function SideNav({ currentUser }) {
               <BsPersonBadge />
             </Link>
           </li>
-          <li className="active">
+          <li>
             <Link to={"/"}>
               <BsStarFill />
             </Link>
@@ -48,8 +48,12 @@ function SideNav({ currentUser }) {
 }
 
 const Container = styled.div`
+  flex: 0 0 auto;
+  width: 6.33333333%;
+  padding: 10px;
+  background-color: var(--faded-primary-color);
+
   .header {
-    background-color: var(--primary-color);
     border: 1px solid #fff;
   }
 
@@ -60,41 +64,44 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: space-between;
     padding: 10px 0;
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      li {
+        padding: 15px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        border-radius: 5px;
+      }
+    }
   }
 
   .side-navbar svg {
-    font-size: 25px;
-  }
-
-  .side-navbar li {
-    padding: 20px 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    border-radius: 5px;
+    font-size: 20px;
   }
 
   .settings {
-    padding: 20px 0;
-    width: 100%;
     display: flex;
     justify-content: center;
   }
 
   .settings a {
-    color: var(--faded-secondary-color);
+    color: var(--secondary-color);
   }
 
   .active {
-    border-right: 5px solid var(--color);
+    background: var(--gradient);
   }
 
   .active a {
-    color: var(--color) !important;
+    color: #fff !important;
   }
 
   .side-navbar li a {
-    color: var(--faded-secondary-color);
+    color: var(--secondary-color);
+    line-height: 1.3;
   }
 
   .contacts-info h3 {
@@ -113,8 +120,8 @@ const Container = styled.div`
   }
 
   .avatar {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
   img {
     width: 100%;

@@ -1,24 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
+import { BsToggleOn } from "react-icons/bs";
 import { passwordSettingRoute, profileSettingRoute } from "../utils/APIRoutes";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Context } from "../context/Context";
 import axios from "axios";
+import LogoutWarning from "./Popups/LogoutWarning";
 
-function SettingsContainer({ currentUser }) {
-  console.log(currentUser);
+function SettingsContainer({ user, switchTheme }) {
   const navigate = useNavigate();
+  const { dispatch } = useContext(Context);
 
-  const [username, setUsername] = useState(currentUser.username);
-  const [email, setEmail] = useState(currentUser.email);
-  const [about, setAbout] = useState(currentUser.about);
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+  const [about, setAbout] = useState(user.about);
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [ispLoading, setIspLoading] = useState(false);
-  console.log(username);
+  const [logoutWarn, setLogoutWarn] = useState(false);
 
   const toastOptions = {
     position: "top-right",
@@ -28,27 +31,38 @@ function SettingsContainer({ currentUser }) {
     theme: "light",
   };
 
+  const logoutWarnFunction = () => {
+    setLogoutWarn(!logoutWarn);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       if (handleValidation()) {
         setIsLoading(true);
-        const { data } = await axios.post(profileSettingRoute, {
-          username,
-          email,
-          about
-        });
+        const { data } = await axios.put(
+          `${profileSettingRoute}/${user._id}`,
+          {
+            username,
+            email,
+            about,
+          }
+        );
         if (data.status === false) {
-          toast.error(data.msg, toastOptions);
+          toast.error(data.message, toastOptions);
           setIsLoading(false);
         }
         if (data.status === true) {
-          localStorage.setItem("User", JSON.stringify(data.user));
+          dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
           navigate("/settings");
+          toast.error(data.message, toastOptions);
         }
       }
     } catch (error) {
-      toast.error("Network Error, Check your network comrade and try again", toastOptions);
+      toast.error(
+        "Network Error, Check your network comrade and try again",
+        toastOptions
+      );
       setIsLoading(false);
     }
   };
@@ -67,14 +81,13 @@ function SettingsContainer({ currentUser }) {
     return true;
   };
 
-
   const handlePasswordSubmit = async (event) => {
     event.preventDefault();
     try {
       if (handlePasswordValidation()) {
         setIspLoading(true);
         const { data } = await axios.post(passwordSettingRoute, {
-          password
+          password,
         });
         if (data.status === false) {
           toast.error(data.msg, toastOptions);
@@ -85,20 +98,29 @@ function SettingsContainer({ currentUser }) {
         }
       }
     } catch (error) {
-      toast.error("Network Error, Check your network comrade and try again", toastOptions);
+      toast.error(
+        "Network Error, Check your network comrade and try again",
+        toastOptions
+      );
       setIspLoading(false);
     }
   };
 
   const handlePasswordValidation = () => {
     if (currentPassword === "") {
-      toast.error("Abeg, Enter the password you were using before", toastOptions);
+      toast.error(
+        "Abeg, Enter the password you were using before",
+        toastOptions
+      );
       return false;
     } else if (password === "") {
       toast.error("Enter your new password!", toastOptions);
       return false;
     } else if (confirmPassword === "") {
-      toast.error("Comrade!, You have to confirm the password na", toastOptions);
+      toast.error(
+        "Comrade!, You have to confirm the password na",
+        toastOptions
+      );
       return false;
     } else if (password !== confirmPassword) {
       toast.error("Please confirm the password again", toastOptions);
@@ -108,7 +130,7 @@ function SettingsContainer({ currentUser }) {
   };
   return (
     <>
-      <Container className="col-lg-11 col-xxl-11">
+      <Container className="settingsContainer">
         <div
           className="body-card tab-pane show active fade"
           id="nav-setting-tab-1"
@@ -118,7 +140,10 @@ function SettingsContainer({ currentUser }) {
               <h1 className="h5 card-title">Account Settings</h1>
             </div>
             <div className="card-body">
-              <form className="row g-3" onSubmit={(event) => handleSubmit(event)}>
+              <form
+                className="row g-3"
+                onSubmit={(event) => handleSubmit(event)}
+              >
                 <div className="col-sm-6">
                   <label className="form-label">Username</label>
                   <input
@@ -148,16 +173,22 @@ function SettingsContainer({ currentUser }) {
                   />
                 </div>
                 <div className="col-12 text-end">
-                  {!isLoading && 
-                  <button type="submit" className="btn btn-sm btn-primary mb-0">
-                  Save changes
-                </button>
-                  }
-                  {isLoading && 
-                  <button type="submit" className="btn btn-sm btn-primary mb-0">
-                  Saving......
-                </button>
-                  }
+                  {!isLoading && (
+                    <button
+                      type="submit"
+                      className="btn btn-sm btn-primary mb-0"
+                    >
+                      Save changes
+                    </button>
+                  )}
+                  {isLoading && (
+                    <button
+                      type="submit"
+                      className="btn btn-sm btn-primary mb-0"
+                    >
+                      Saving......
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
@@ -167,41 +198,74 @@ function SettingsContainer({ currentUser }) {
               <h5 className="card-title">Change your password</h5>
             </div>
             <div className="card-body">
-              <form className="row g-3" onSubmit={(event) => handlePasswordSubmit(event)}>
+              <form
+                className="row g-3"
+                onSubmit={(event) => handlePasswordSubmit(event)}
+              >
                 <div className="col-12">
                   <label className="form-label">Current password</label>
-                  <input type="text" className="form-control" placeholder="Current password" 
-                    onChange={(e) => setCurrentPassword(e.target.value)} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Current password"
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                  />
                 </div>
                 <div className="col-12">
                   <label className="form-label">New password</label>
-                    <input
-                      className="form-control fakepassword"
-                      type="text"
-                      id="psw-input"
-                      placeholder="Enter new password"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                  <input
+                    className="form-control fakepassword"
+                    type="text"
+                    id="psw-input"
+                    placeholder="Enter new password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
                 <div className="col-12">
                   <label className="form-label">Confirm password</label>
-                  <input type="text" className="form-control" placeholder="Confirm Password" 
-                    onChange={(e) => setConfirmPassword(e.target.value)} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Confirm Password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
                 </div>
                 <div className="col-12 text-end">
-                  {!ispLoading && 
-                  <button type="submit" className="btn btn-sm btn-primary mb-0">
-                  Update password
-                </button>
-                  }
-                  {ispLoading && 
-                  <button type="submit" className="btn btn-sm btn-primary mb-0">
-                  Updating........
-                </button>
-                  }
+                  {!ispLoading && (
+                    <button
+                      type="submit"
+                      className="btn btn-sm btn-primary mb-0"
+                    >
+                      Update password
+                    </button>
+                  )}
+                  {ispLoading && (
+                    <button
+                      type="submit"
+                      className="btn btn-sm btn-primary mb-0"
+                    >
+                      Updating........
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
+          </div>
+
+          <div className="p-4 col-12 danger-row d-flex justify-content-between">
+            <button
+              onClick={logoutWarnFunction}
+              className="btn btn-primary btn-sm"
+            >
+              Log Out
+              {logoutWarn && <LogoutWarning />}
+            </button>
+            <button className="btn btn-dark btn-sm">
+              <BsToggleOn onClick={switchTheme} />
+            </button>
+            <button className="btn btn-danger btn-sm">
+              Close Account
+            </button>
           </div>
         </div>
       </Container>
@@ -211,6 +275,9 @@ function SettingsContainer({ currentUser }) {
 }
 
 const Container = styled.div`
+  flex: 0 0 auto;
+  width: 93.66666667%;
+
   .body-card {
     background-color: var(--primary-color);
     height: 100vh;
@@ -219,24 +286,34 @@ const Container = styled.div`
   .card-title {
     color: var(--secondary-color);
   }
-  label {
-    color: var(--faded-secondary-color);
+  form {
+    label {
+      color: var(--faded-secondary-color);
+    }
+    .form-control {
+      background-color: transparent;
+      border: 1px solid var(--faded-secondary-color);
+      outline: none;
+      color: var(--secondary-color);
+    }
+    &:focus {
+      border: none;
+      outline: none;
+    }
+    button {
+      background: var(--gradient);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
   }
-  .form-control {
-    background-color: transparent;
-    border: 1px solid var(--faded-secondary-color);
-    outline: none;
-    color: var(--secondary-color);
-  }
-  &:focus {
-    border: none;
-    outline: none;
-  }
-  button {
-    background: var(--gradient);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
+  .danger-row {
+    button {
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
   }
 `;
 

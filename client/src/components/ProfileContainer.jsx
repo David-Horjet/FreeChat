@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -6,9 +6,9 @@ import { BiCopy } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import { host } from "../utils/APIRoutes";
 
-function ProfileContainer({ currentUser }) {
-  console.log(currentUser);
-  const image = `${host}/${currentUser.image}`;
+function ProfileContainer({ profile, user }) {
+  const image = `${host}/${profile.image}`;
+  const [publicProfile, setPublicProfile] = useState(true);
 
   const toastOptions = {
     position: "top-right",
@@ -18,51 +18,72 @@ function ProfileContainer({ currentUser }) {
     theme: "light",
   };
 
+  useEffect(() => {
+    if (profile._id === user._id) {
+      setPublicProfile(false);
+    } else {
+      setPublicProfile(true);
+    }
+  }, [profile._id, user._id]);
+
   const copyUsernameLink = async () => {
     try {
-      await navigator.clipboard.writeText("Copy this text to clipboard");
+      await navigator.clipboard.writeText(
+        `https://freechatt.herokuapp.com/${profile.username}`
+      );
       toast.success("Profile link successfully copied", toastOptions);
     } catch (err) {
       toast.success("Profile link successfully copied", toastOptions);
     }
   };
+
   return (
     <>
-      <Container className="col-lg-11 col-xxl-11">
+      <Container className="profileContainer">
         <div className="body-card">
-          <div className="col-5 mx-auto d-flex justify-content-center">
-            <div className="w-100 card p-4">
+          <div className="card-container col-sm-5 mx-auto d-flex justify-content-center">
+            <div className="w-100 card">
               <div className="image d-flex flex-column justify-content-center align-items-center">
+                <div className="cover-bg"></div>
                 <div className="avatar">
-                  <img src={image} className="w-100 h-100" />
+                  <img src={image} className="w-100 h-100" alt="profile-pic" />
                 </div>
-                <h2 className="name mt-3">{currentUser.username}</h2>
+                <h2 className="name mt-3">{profile.username}</h2>
+                <div className="about d-flex flex-row justify-content-center align-items-center mt-3">
+                  <p>{profile.about}</p>
+                </div>
                 <div className="d-flex flex-row justify-content-center align-items-center gap-2">
-                  <span className="uname">@{currentUser.username}</span>{" "}
+                  <span className="uname">@{profile.username}</span>{" "}
                   <span title="Copy link to clipboard">
                     <BiCopy onClick={() => copyUsernameLink()} />
                   </span>
                 </div>
-                <div className="d-flex flex-row justify-content-center align-items-center mt-3">
+                <div className="d-flex flex-row justify-content-center align-items-center my-3">
                   <span className="number">
                     1069 <span className="follow">Favourites</span>
                   </span>
                 </div>
-                <div className="d-flex flex-row justify-content-center align-items-center mt-3">
-                  <p>{currentUser.about}</p>
-                </div>
-                <div className=" d-flex mt-2">
-                  <button>
-                    <Link to={"/settings"}>Edit Profile</Link>
-                  </button>
-                </div>
-                <div className=" px-2 rounded mt-4 date ">
+                {publicProfile && (
+                  <div className=" d-flex mt-2">
+                    <button>
+                      <Link to={"/settings"}>Add Friend</Link>
+                    </button>
+                  </div>
+                )}
+                {!publicProfile && (
+                  <div className=" d-flex mt-2">
+                    <button>
+                      <Link to={"/settings"}>Edit Profile</Link>
+                    </button>
+                  </div>
+                )}
+                <div className=" px-2 rounded my-3 date ">
                   <span className="join">
                     Joined{" "}
-                    {new Date(currentUser.createdAt).toLocaleString("default", {
+                    {new Date(profile.createdAt).toLocaleString("default", {
                       month: "short",
                     })}
-                    , {new Date(currentUser.createdAt).getFullYear()}
+                    , {new Date(profile.createdAt).getFullYear()}
                   </span>
                 </div>
               </div>
@@ -76,6 +97,9 @@ function ProfileContainer({ currentUser }) {
 }
 
 const Container = styled.div`
+  flex: 0 0 auto;
+  width: 93.66666667%;
+
   .body-card {
     background-color: var(--primary-color);
     overflow: auto;
@@ -86,13 +110,23 @@ const Container = styled.div`
     gap: 1rem;
     align-items: center;
     justify-content: center;
+    .card-container {
+      border-radius: 10px;
+    }
   }
   .card {
     background: var(--faded-primary-color);
+    border: none;
+    .cover-bg {
+      width: 100%;
+      height: 100px;
+      background: var(--gradient);
+    }
   }
   .avatar {
-    width: 150px;
-    height: 150px;
+    margin-top: -50px;
+    width: 100px;
+    height: 100px;
     img {
       border-radius: 50%;
       object-fit: cover;
@@ -101,6 +135,11 @@ const Container = styled.div`
   }
   .name {
     color: var(--secondary-color);
+  }
+  .about {
+    p {
+      color: var(--faded-secondary-color);
+    }
   }
   .uname {
     color: var(--color);

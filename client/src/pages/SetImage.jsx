@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,13 +7,15 @@ import axios from "axios";
 import { setImageRoute } from "../utils/APIRoutes";
 import { BsPersonCircle } from "react-icons/bs";
 import { DiSenchatouch } from "react-icons/di";
+import { Context } from "../context/Context";
 
 function SetImage() {
+  const user = useContext(Context);
   const navigate = useNavigate();
   const [image, setImage] = useState({ preview: "", data: "" });
   const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [about, setAbout] = useState("");
 
   const toastOptions = {
     position: "top-right",
@@ -24,52 +26,70 @@ function SetImage() {
   };
 
   useEffect(() => {
-    document.title = "Set Profile Picture - FreeChat"
-  })
-
-  useEffect(() => {
-    async function setUser() {
-      if (!localStorage.getItem("User")) {
-        navigate("/login");
-      } else {
-        setCurrentUser(await JSON.parse(localStorage.getItem("User")));
-      }
-    }
-    setUser();
-  }, [navigate]);
+    document.title = "Set Profile Picture - FreeChat";
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     setIsLoading(true);
-     let formData = new FormData();
-     if (image.data) {
-       formData.append("image", image.data);
-       console.log(formData);
-       const config = {
-         headers: {
-           "content-type": "multipart/form-data",
-         },
-       };
-       const response = await axios.post(`${setImageRoute}/${currentUser._id}`, formData, config);
-       console.log(response);
-       if (response) {
-         toast.success(response.data.msg, toastOptions);
-       }
-       if (response.data.status === true) {
-         localStorage.setItem("User", JSON.stringify(response.data.userData));
-         navigate("/login");
-       }
-       if (response.data.status === false) {
-           toast.error("An error occured while setting up your profile pic", toastOptions);
-           setIsLoading(false);
-       }
-     } else {
-       toast.error("Please choose a profile pic", toastOptions);
-     }
+      if (handleValidation()) {
+        setIsLoading(true);
+        let formData = new FormData();
+        if (image.data) {
+          formData.append("image", image.data);
+          formData.append("about", about);
+          console.log(formData);
+          const config = {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          };
+          const response = await axios.post(
+            `${setImageRoute}/${user._id}`,
+            formData,
+            config
+          );
+          console.log(response);
+          if (response) {
+            toast.success(response.data.msg, toastOptions);
+          }
+          if (response.data.status === true) {
+            localStorage.setItem(
+              "User",
+              JSON.stringify(response.data.userData)
+            );
+            navigate("/login");
+          }
+          if (response.data.status === false) {
+            toast.error(
+              "An error occured while setting up your profile pic",
+              toastOptions
+            );
+            setIsLoading(false);
+          }
+        } else {
+          toast.error("Please choose a profile pic", toastOptions);
+          setIsLoading(false);
+        }
+      }
     } catch (error) {
-     toast.error("Network Error,Please check your network connection and try again", toastOptions);
-           setIsLoading(false);
+      toast.error(
+        "Network Error,Please check your network connection and try again",
+        toastOptions
+      );
+      setIsLoading(false);
+    }
+  };
+
+  const handleValidation = () => {
+    if (image === "") {
+      toast.error("Please you have to tell us about yourself", toastOptions);
+      return false;
+    } else if (about === "") {
+      toast.error("Please choose a profile pic", toastOptions);
+      return false;
+    } else {
+      return true;
     }
   };
 
@@ -94,6 +114,7 @@ function SetImage() {
               Free<span>Chat</span>
             </h1>
           </div>
+          <p>Choose your profile picture to help friends recognize you</p>
           {!image.preview && (
             <div
               onClick={handleClick}
@@ -120,6 +141,14 @@ function SetImage() {
             name="image"
             onChange={handleFileChange}
           />
+          <textarea
+            maxLength={200}
+            className="form-control"
+            rows="4"
+            onChange={(e) => setAbout(e.target.value)}
+            placeholder="Tell the world about Yourself"
+          />
+          <span className="limit">Character Limit: 200</span>
           {!isLoading && <button type="submit">Submit</button>}
           {isLoading && (
             <button disabled type="submit">
@@ -161,21 +190,24 @@ const FormContainer = styled.div`
       }
     }
   }
-  .avatar{
-     svg {
-          color: var(--color);
-          font-size: 8.5rem;
-     }
+  p {
+    color: var(--faded-secondary-color);
+  }
+  .avatar {
+    svg {
+      color: var(--color);
+      font-size: 8.5rem;
     }
-    .avatar-img img {
-     width: 160px;
-     height: 160px;
-     border-radius: 50%;
-    }
+  }
+  .avatar-img img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+  }
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.5rem;
     background-color: var(--primary-color);
     border-radius: 10px;
     padding: 2rem 3rem;
@@ -189,6 +221,20 @@ const FormContainer = styled.div`
     }
     &:focus {
       border: none;
+      outline: none;
+    }
+    textarea {
+      border: none;
+      border-bottom: 1px solid var(--faded-secondary-color);
+      background: var(--faded-primary-color);
+      color: var(--secondary-color);
+    }
+    &:focus {
+      border: none;
+      outline: none;
+    }
+    .limit {
+      color: var(--faded-secondary-color);
     }
     button {
       background: var(--gradient);

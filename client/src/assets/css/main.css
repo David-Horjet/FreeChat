@@ -10,8 +10,8 @@
 } 
 
 :root {
-  --color: #3238ae;
-  --gradient: linear-gradient(to top right, #3238ae, #A52AF2);
+  --color: #3378FF;
+  --gradient: linear-gradient(to top right, #3378FF, #9442FE);
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
@@ -71,29 +71,23 @@
   --bs-body-color: #212529;
   --bs-body-bg: #fff;
   
-  /* --primary-color: #fff !important;
+  --primary-color: #f6f6fc !important;
+  --cover-primary-color: #f0f2f5 !important;
   --secondary-color: #14191e !important;
   --lowOpacity-secondary-color: #14191e85 !important;
   --lowOpacity-primary-color: #ffffff51 !important;
   --faded-secondary-color: #14191e !important;
-  --faded-primary-color: #f0f0f0 !important; */
-
-  --primary-color: #121212 !important;
-  --secondary-color: rgb(243, 241, 241) !important;
-  --lowOpacity-primary-color: #14191e85 !important;
-  --lowOpacity-secondary-color: #ffffff51 !important;
-  --faded-primary-color: #18191a !important;
-  --faded-secondary-color: #adadad !important;
+  --faded-primary-color: #f0f0f0 !important;
 }
 
-/* .dark-mode { */
-  /* --primary-color: #0a0a0a !important;
+[data-theme='dark'] {
+  --primary-color: #18191A !important;
   --secondary-color: rgb(243, 241, 241) !important;
   --lowOpacity-primary-color: #14191e85 !important;
   --lowOpacity-secondary-color: #ffffff51 !important;
-  --faded-primary-color: #0f0f10 !important;
-  --faded-secondary-color: #adadad !important; */
-/* } */
+  --faded-primary-color: #242526 !important;
+  --faded-secondary-color: #adadad !important;
+ }
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
@@ -120,11 +114,27 @@ body::-webkit-scrollbar-thumb {
   background-color: var(--faded-secondary-color);
   border-radius: var(--scrollbar-br);
 }
+.app {
+  transition: all 3s;
+}
 .h-10{
   height: 10%;
   background-color: var(--faded-primary-color);
   display: flex;
   justify-content: space-between;
+}
+.Toastify__progress-bar--success {
+  background: var(--color) !important;
+}
+.Toastify__progress-bar--error {
+  background: var(--color) !important;
+}
+.Toastify--animate-icon svg {
+  fill: var(--color);
+}
+.Toastify__toast-theme--light {
+  background: #e7e8fc !important;
+  color: var(--toastify-text-color-light);
 }
 hr {
   color: inherit;
@@ -2069,7 +2079,7 @@ progress {
   margin-inline-end: 1rem;
 }
 textarea.form-control {
-  min-height: calc(1.5em + 0.75rem + 2px);
+  min-height: 40px;
 }
 textarea.form-control-sm {
   min-height: calc(1.5em + 0.5rem + 2px);
@@ -5386,6 +5396,72 @@ fieldset:disabled .btn {
 .modal-fullscreen .modal-footer {
   border-radius: 0;
 }
+@media (max-width: 991.98px) {
+  .modal-fullscreen-lg-down {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen-lg-down .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen-lg-down .modal-header {
+    border-radius: 0;
+  }
+  .modal-fullscreen-lg-down .modal-body {
+    overflow-y: auto;
+  }
+  .modal-fullscreen-lg-down .modal-footer {
+    border-radius: 0;
+  }
+  .sideNav {
+    background-color: var(--primary-color);
+    width: 100% !important;
+    position: fixed;
+    z-index: 99;
+    right: 0;
+    left: 0;
+  }
+  .sideNav .side-navbar {
+    flex-direction: row !important;
+    padding: 0 !important;
+    align-items: center;
+  }
+  .sideNav .side-navbar ul {
+    flex-direction: row !important;
+    margin: auto;
+  }
+  .sideNav .side-navbar li {
+    padding: 15px 20px !important;
+  }
+  .contacts-container {
+    flex: 0 0 auto !important;
+    width: 33.33333333% !important;
+  }
+  .welcome-chat {
+    flex: 0 0 auto !important;
+    width: 66.66666667% !important;
+  }
+  .chatContainer {
+    flex: 0 0 auto !important;
+    width: 66.66666667% !important;
+  }
+  .profileContainer {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
+  .profileContainer .card-container {
+    flex: 0 0 auto !important;
+    width: 75% !important;
+  }
+  .settingsContainer {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
+}
 @media (max-width: 575.98px) {
   .modal-fullscreen-sm-down {
     width: 100vw;
@@ -5407,6 +5483,37 @@ fieldset:disabled .btn {
   .modal-fullscreen-sm-down .modal-footer {
     border-radius: 0;
   }
+  .sideNav .side-navbar ul {
+    background-color: var(--primary-color);
+    width: 100% !important;
+    position: fixed;
+    z-index: 99;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    justify-content: space-between;
+  }
+  .contacts-container {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
+  .contacts-container .nav {
+    flex-direction: row !important;
+  }
+  .contacts-container .nav h6 {
+    display: none;
+  }
+  .contacts-container .nav .small {
+    display: none;
+  }
+  .welcome-chat {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
+  .chatContainer {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
 }
 @media (max-width: 767.98px) {
   .modal-fullscreen-md-down {
@@ -5427,28 +5534,6 @@ fieldset:disabled .btn {
     overflow-y: auto;
   }
   .modal-fullscreen-md-down .modal-footer {
-    border-radius: 0;
-  }
-}
-@media (max-width: 991.98px) {
-  .modal-fullscreen-lg-down {
-    width: 100vw;
-    max-width: none;
-    height: 100%;
-    margin: 0;
-  }
-  .modal-fullscreen-lg-down .modal-content {
-    height: 100%;
-    border: 0;
-    border-radius: 0;
-  }
-  .modal-fullscreen-lg-down .modal-header {
-    border-radius: 0;
-  }
-  .modal-fullscreen-lg-down .modal-body {
-    overflow-y: auto;
-  }
-  .modal-fullscreen-lg-down .modal-footer {
     border-radius: 0;
   }
 }
@@ -5986,19 +6071,6 @@ fieldset:disabled .btn {
     animation-duration: 1.5s;
   }
 }
-.offcanvas {
-  position: fixed;
-  bottom: 0;
-  z-index: 1045;
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-  visibility: hidden;
-  background-color: #fff;
-  background-clip: padding-box;
-  outline: 0;
-  transition: transform 0.3s ease-in-out;
-}
 @media (prefers-reduced-motion: reduce) {
   .offcanvas {
     transition: none;
@@ -6039,13 +6111,6 @@ fieldset:disabled .btn {
   flex-grow: 1;
   padding: 1rem 1rem;
   overflow-y: auto;
-}
-.offcanvas-start {
-  top: 0;
-  left: 0;
-  width: 400px;
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
-  transform: translateX(-100%);
 }
 .offcanvas-end {
   top: 0;

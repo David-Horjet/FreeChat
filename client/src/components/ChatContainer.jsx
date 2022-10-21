@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import {Link} from "react-router-dom"
 import styled from "styled-components";
 import { AiFillAudio } from "react-icons/ai";
 import ChatInput from "./ChatInput";
@@ -12,7 +13,7 @@ import { v4 as uuid4 } from "uuid";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaVideo } from "react-icons/fa";
 
-function ChatContainer({ currentChat, currentUser, socket }) {
+function ChatContainer({ currentChat, user, socket }) {
   const image = `${host}/${currentChat.image}`;
 
   const [messages, setMessages] = useState([]);
@@ -24,37 +25,36 @@ function ChatContainer({ currentChat, currentUser, socket }) {
     async function getMsg() {
       if (currentChat) {
         const response = await axios.post(getAllMessagesRoute, {
-          from: currentUser._id,
+          from: user._id,
           to: currentChat._id,
         });
         setMessages(response.data);
       }
     }
     getMsg();
-  }, [currentChat, currentUser]);
+  }, [currentChat, user]);
 
   const handleSendMsg = async (msg) => {
     await axios.post(sendMessageRoute, {
-      from: currentUser._id,
+      from: user._id,
       to: currentChat._id,
       message: msg,
     });
     socket.current.emit("send-msg", {
       to: currentChat._id,
-      from: currentUser._id,
+      from: user._id,
       message: msg,
     });
 
     const msgs = [...messages];
-    console.log(msgs);
-    msgs.push({ fromSelf: true, message: msg, });
+    msgs.push({ fromSelf: true, message: msg });
     setMessages(msgs);
   };
 
   useEffect(() => {
     if (socket.current) {
       socket.current.on("msg-receive", (msg) => {
-        setArrivalMessage({ fromSelf: false, message: msg, });
+        setArrivalMessage({ fromSelf: false, message: msg });
       });
     }
   });
@@ -67,9 +67,11 @@ function ChatContainer({ currentChat, currentUser, socket }) {
     scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
 
+  console.log(messages)
+
   return (
     <>
-      <Container className="contact-container col-lg-8 col-xxl-8">
+      <Container className="chatContainer">
         <div className="card card-chat ">
           <div className="card-body">
             <div className="tab-content py-0 mb-0 h-100" id="chatTabsContent">
@@ -79,8 +81,8 @@ function ChatContainer({ currentChat, currentUser, socket }) {
                 role="tabpanel"
                 aria-labelledby="chat-1-tab"
               >
-                <div className="p-3 d-sm-flex justify-content-between align-items-center">
-                  <div className="d-flex mb-2 mb-sm-0">
+                <div className="border-bottom p-3 d-sm-flex justify-content-between align-items-center">
+                  <Link to={`/${currentChat.username}`} className="d-flex mb-2 mb-sm-0">
                     <div className="flex-shrink-0 avatar me-2">
                       <img
                         className="avatar-img rounded-circle"
@@ -95,7 +97,7 @@ function ChatContainer({ currentChat, currentUser, socket }) {
                         Online
                       </div>
                     </div>
-                  </div>
+                  </Link>
                   <div className="call d-flex align-items-center">
                     {/* <!-- Call button --> */}
                     <a
@@ -162,6 +164,14 @@ function ChatContainer({ currentChat, currentUser, socket }) {
 }
 
 const Container = styled.div`
+  flex: 0 0 auto;
+  width: 68.66666667%;
+  background-color: var(--faded-primary-color);
+
+  .card {
+    height: 100%;
+  }
+
   .tab-pane {
     height: 90%;
   }

@@ -1,45 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-function Welcome({ currentUser }) {
-  const [currentUserName, setCurrentUserName] = useState(undefined); 
-
-  useEffect(() => {
-    async function getUser() {
-      if (currentUser) {
-        const user = await JSON.parse(currentUser);
-        setCurrentUserName(user.firstName);
-      }
-    }
-    getUser();
-  }, [currentUser]);
+function Welcome({ user }) {
 
   return (
     <>
-      <Container className="welcome-chat col-lg-8 col-xxl-8">
-          <div className="card card-chat ">
-            <div className="card-body h-100">
-              <h1 className="text-center">
-                Welcome <span>Back 😃</span> {currentUserName}
-              </h1>
-              <h5 className="text-center text-white">
-                Start Conversation{" "}
-              </h5>
-            </div>
+      <Container className="welcome-chat">
+        <div className="card card-chat ">
+          <div className="card-body h-100">
+            <h1 className="text-center">
+              Welcome <span>Back</span> {user.username} 😃
+            </h1>
+            <h5 className="text-center text-white">
+              Select a friend to start conversation{" "}
+            </h5>
           </div>
+        </div>
       </Container>
     </>
   );
 }
 
 const Container = styled.div`
+  flex: 0 0 auto;
+  width: 68.66666667%;
+
   .card {
-    background-color: var(--primary-color);
+    background-color: var(--faded-primary-color);
   }
 
   h1 {
     font-family: Arial, Helvetica, sans-serif !important;
     color: var(--secondary-color);
+    overflow: hidden;
   }
 
   h5 {
