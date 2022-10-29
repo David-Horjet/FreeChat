@@ -59,9 +59,6 @@ function ChatInput({ handleSendMsg }) {
 }
 
 const Container = styled.div`
-  .button-container {
-    width: 5%;
-  }
   svg {
     color: var(--color);
     font-size: 25px;

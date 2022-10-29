@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Context } from "../context/Context";
 import axios from "axios";
 import { loginRoute } from "../utils/APIRoutes";
-import { DiSenchatouch } from "react-icons/di";
+import logo from "../assets/images/logo2.png"
 
 function Login() {
   const navigate = useNavigate();
@@ -44,11 +44,15 @@ function Login() {
         if (res.data.status === true) {
           dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
           localStorage.setItem("token", JSON.stringify(res.data.token));
-          navigate("/");
+          toast.success(res.data.msg, toastOptions);
+          setTimeout(() => {
+            navigate("/")
+          }, 3000);
         }
       }
     } catch (error) {
       dispatch({ type: "LOGIN_FAILURE" });
+      toast.error("Network Error", toastOptions);
     }
   };
 
@@ -75,7 +79,7 @@ function Login() {
       <FormContainer>
         <form onSubmit={(event) => handleSubmit(event)}>
           <div className="logo">
-            <DiSenchatouch />
+            <img src={logo} alt="logo"/>
             <h1>
               Free<span>Chat</span>
             </h1>
@@ -92,7 +96,9 @@ function Login() {
             name="password"
             onChange={(e) => handleChange(e)}
           />
-          <button type="submit" disabled={isFetching}>Log in</button>
+          {isFetching ?
+           (<button type="submit" disabled >Please wait...</button>) :
+           (<button type="submit">Log in</button>)}
           <span>
             Don't have an account ? <Link to={"/register"}>Register</Link>
           </span>
@@ -116,9 +122,8 @@ const FormContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    svg {
-      color: var(--color);
-      font-size: 25px;
+    img {
+      width: 50px;
     }
     h1 {
       color: var(--secondary-color);
@@ -132,7 +137,7 @@ const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    background-color: var(--primary-color);
+    background: var(--primary-color);
     border-radius: 10px;
     padding: 2rem 3rem;
     input {
@@ -145,7 +150,8 @@ const FormContainer = styled.div`
       font-size: 1rem;
     }
     &:focus {
-      border: none;
+      border: none !important;
+      outline: none !important;
     }
     button {
       background: var(--gradient);
@@ -156,23 +162,20 @@ const FormContainer = styled.div`
       cursor: pointer;
       border-radius: 0.4rem;
       font-size: 1rem;
-      text-transform: uppercase;
-      transition: 0.5s ease-in-out;
+      transition: 0.3s all;
       &:hover {
-        background-color: #4e0eff;
+        background: #4e0eff;
       }
       &:disabled {
         cursor: not-allowed;
-        background-color: #946dff;
+        background: #946dff;
       }
     }
     span {
       color: var(--secondary-color);
       a {
         color: #4e0eff;
-        text-transform: none;
         font-weight: bold;
-        text-transform: uppercase;
         text-decoration: none;
       }
     }

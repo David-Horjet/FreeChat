@@ -81,7 +81,7 @@ function ChatContainer({ currentChat, user, socket }) {
                 role="tabpanel"
                 aria-labelledby="chat-1-tab"
               >
-                <div className="border-bottom p-3 d-sm-flex justify-content-between align-items-center">
+                <div className="border-bottom p-3 d-flex justify-content-between align-items-center">
                   <Link to={`/${currentChat.username}`} className="d-flex mb-2 mb-sm-0">
                     <div className="flex-shrink-0 avatar me-2">
                       <img

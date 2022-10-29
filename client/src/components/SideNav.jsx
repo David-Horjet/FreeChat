@@ -10,7 +10,7 @@ function SideNav({ user }) {
   return (
     <Container className="sideNav">
       <nav className="side-navbar">
-        <div className="d-flex justify-content-center">
+        <div className="avatar-box d-flex justify-content-center">
           <Link to={`/${user.username}`} className="avatar">
             <img src={`${host}/${user.image}`} alt="" />
           </Link>
@@ -27,7 +27,7 @@ function SideNav({ user }) {
             </Link>
           </li>
           <li>
-            <Link to={"/"}>
+            <Link to={"/settings"}>
               <BsPersonBadge />
             </Link>
           </li>
@@ -88,7 +88,7 @@ const Container = styled.div`
   }
 
   .settings a {
-    color: var(--secondary-color);
+    color: var(--faded-secondary-color);
   }
 
   .active {
@@ -96,7 +96,7 @@ const Container = styled.div`
   }
 
   .active a {
-    color: #fff !important;
+    color: #fff;
   }
 
   .side-navbar li a {

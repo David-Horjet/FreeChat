@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { host } from "../utils/APIRoutes";
+import { Link } from "react-router-dom";
 import { BsFillGridFill, BsSearch } from "react-icons/bs";
-function Contacts({ contacts, currentUser, changeChat }) {
-  const [currentUserName, setCurrentUserName] = useState(undefined);
+import RoundLoader from "./Loaders/RoundLoader";
+
+function Contacts({ contacts, changeChat, user }) {
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    async function getUser() {
-      if (currentUser) {
-        await JSON.parse(currentUser);
-        setCurrentUserName(currentUser.username);
-      }
+    if (contacts.length <= 0) {
+      setIsLoading(true);
     }
-    getUser();
-  }, [currentUser]);
+  }, [contacts]);
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
     changeChat(contact);
@@ -30,9 +28,9 @@ function Contacts({ contacts, currentUser, changeChat }) {
               <div className="card-head">
                 <div className=" d-flex justify-content-between align-items-center">
                   <h1 className="h5 mb-0">Chats</h1>
-                  <div className="dropend position-relative">
+                  <Link to={`/${user.username}`} className="dropend position-relative">
                     <BsFillGridFill />
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="head pb-3">
@@ -55,45 +53,51 @@ function Contacts({ contacts, currentUser, changeChat }) {
                 <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
                   <div className="h-100 custom-scrollbar">
                     <div className="chat-tab-list custom-scrollbar">
-                      <ul className="nav flex-column nav-pills nav-pills-soft">
-                        {contacts.map((contact, index) => {
-                          return (
-                            <li
-                              className={`contact ${
-                                index === currentSelected ? "selected" : ""
-                              }`}
-                              key={index}
-                              onClick={() => changeCurrentChat(index, contact)}
-                              data-bs-dismiss="offcanvas"
-                            >
-                              <button
-                                className="nav-link text-start w-100"
-                                id="chat-1-tab"
-                                data-bs-toggle="pill"
-                                role="tab"
+                      {isLoading ? (
+                        <ul className="nav flex-column nav-pills nav-pills-soft">
+                          {contacts.map((contact, index) => {
+                            return (
+                              <li
+                                className={`contact ${
+                                  index === currentSelected ? "selected" : ""
+                                }`}
+                                key={index}
+                                onClick={() =>
+                                  changeCurrentChat(index, contact)
+                                }
+                                data-bs-dismiss="offcanvas"
                               >
-                                <div className="d-flex">
-                                  <div className="flex-shrink-0 avatar avatar-story me-2 status-online">
-                                    <img
-                                      className="avatar-img rounded-circle"
-                                      src={`${host}/${contact.image}`}
-                                      alt="user-pic"
-                                    />
-                                  </div>
-                                  <div className="flex-grow-1 d-block">
-                                    <h6 className="mb-0 mt-1">
-                                      {contact.username}
-                                    </h6>
-                                    <div className="small text-secondary">
-                                      Frances sent a photo.
+                                <button
+                                  className="nav-link text-start w-100"
+                                  id="chat-1-tab"
+                                  data-bs-toggle="pill"
+                                  role="tab"
+                                >
+                                  <div className="d-flex">
+                                    <div className="flex-shrink-0 avatar avatar-story me-2 status-online">
+                                      <img
+                                        className="avatar-img rounded-circle"
+                                        src={`${host}/${contact.image}`}
+                                        alt="user-pic"
+                                      />
+                                    </div>
+                                    <div className="flex-grow-1 d-block">
+                                      <h6 className="mb-0 mt-1">
+                                        {contact.username}
+                                      </h6>
+                                      <div className="small text-secondary">
+                                        Frances sent a photo.
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : (
+                        <RoundLoader />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -110,8 +114,12 @@ const Container = styled.div`
   flex: 0 0 auto;
   width: 25%;
   background-color: var(--primary-color);
-  .custom-scrollbar::-webkit-scrollbar{width: 5px;}
-  .custom-scrollbar::-webkit-scrollbar-thumb{background: var(--faded-secondary-color)}
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--faded-secondary-color);
+  }
   hr {
     background-color: var(--faded-secondary-color);
     color: var(--faded-secondary-color);
@@ -222,36 +230,36 @@ const Container = styled.div`
   .offcanvas-body {
     height: 80vh;
 
-  .navbar {
-    height: 100%;
-    padding: 0;
-  }
-  ul {
-    gap: 10px;
-  }
-  ul li {
-    font-size: 16px;
-    border-radius: 5px;
-    padding: 5px 10px;
-  }
-  ul .selected button {
-    background: var(--gradient);
-  }
-  button {
-    padding: 8px;
-    background-color: var(--faded-primary-color);
-    border-radius: 10px;
-    .small {
-      color: var(--faded-secondary-color) !important;
+    .navbar {
+      height: 100%;
+      padding: 0;
     }
-  }
-  .offcanvas {
-    height: 100%;
-    overflow: auto;
-    .card {
-      border: none;
+    ul {
+      gap: 10px;
     }
-  }
+    ul li {
+      font-size: 16px;
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+    ul .selected button {
+      background: var(--gradient);
+    }
+    button {
+      padding: 8px;
+      background-color: var(--faded-primary-color);
+      border-radius: 10px;
+      .small {
+        color: var(--faded-secondary-color) !important;
+      }
+    }
+    .offcanvas {
+      height: 100%;
+      overflow: auto;
+      .card {
+        border: none;
+      }
+    }
   }
 
   h6 {

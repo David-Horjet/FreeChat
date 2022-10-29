@@ -11,7 +11,7 @@ function Welcome({ user }) {
             <h1 className="text-center">
               Welcome <span>Back</span> {user.username} 😃
             </h1>
-            <h5 className="text-center text-white">
+            <h5 className="text-center">
               Select a friend to start conversation{" "}
             </h5>
           </div>
@@ -24,14 +24,11 @@ function Welcome({ user }) {
 const Container = styled.div`
   flex: 0 0 auto;
   width: 68.66666667%;
-
-  .card {
-    background-color: var(--faded-primary-color);
-  }
+  background-color: var(--faded-primary-color);
 
   h1 {
     font-family: Arial, Helvetica, sans-serif !important;
-    color: var(--secondary-color);
+    color: #ffffff;
     overflow: hidden;
   }
 

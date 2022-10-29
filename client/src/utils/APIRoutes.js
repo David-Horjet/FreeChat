@@ -6,5 +6,6 @@ export const usersRoute = `${host}/api/user/all`;
 export const userRoute = `${host}/api/user/`;
 export const profileSettingRoute = `${host}/api/user/settings`;
 export const passwordSettingRoute = `${host}/api/user/settings/password`;
+export const deleteUserRoute = `${host}/api/user/delete`;
 export const sendMessageRoute = `${host}/api/messages/addmsg`;
 export const getAllMessagesRoute = `${host}/api/messages/getmsg`;

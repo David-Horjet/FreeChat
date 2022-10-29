@@ -12,6 +12,9 @@ const {
      userRouter
 } = require("./routes/userRoute");
 const {
+     adminRouter
+} = require("./routes/adminRoute");
+const {
      messageRouter
 } = require("./routes/messagesRoute");
 const {
@@ -23,12 +26,17 @@ const {
 
 PORT = process.env.PORT;
 dbURI = process.env.dbURI;
+const corsOptions = {
+     origin: 'https://freechatt.netlify.app',
+     credentials: true,
+     optionSuccessStatus: 200
+}
 
 const app = express();
 
 app.use(newSession);
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use("/public/", express.static('./public'));
 app.use((req, res, next) => {
      res.locals.user = req.session.user;
@@ -39,6 +47,7 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/messages", messageRouter);
 app.use('/', mainRouter);
 
@@ -57,11 +66,16 @@ const server = app.listen(PORT, (req, res) => {
 })
 
 const io = socket(server, {
-     cors: {
-          origin: "http://localhost:3000",
-          credentials: true,
-     },
-});
+     handlePreflightRequest: (req, res) => {
+         const headers = {
+             "Access-Control-Allow-Headers": "Content-Type, Authorization",
+             "Access-Control-Allow-Origin": req.headers.origin, 
+             "Access-Control-Allow-Credentials": true
+         };
+         res.writeHead(200, headers);
+         res.end();
+     }
+ });
 
 global.onlineUsers = new Map();
 

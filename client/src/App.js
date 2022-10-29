@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import "./assets/css/main.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";

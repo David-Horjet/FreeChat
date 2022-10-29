@@ -29,11 +29,11 @@ function ProfileContainer({ profile, user }) {
   const copyUsernameLink = async () => {
     try {
       await navigator.clipboard.writeText(
-        `https://freechatt.herokuapp.com/${profile.username}`
+        `https://freechatt.netlify.app//${profile.username}`
       );
       toast.success("Profile link successfully copied", toastOptions);
     } catch (err) {
-      toast.success("Profile link successfully copied", toastOptions);
+      toast.error("An error occured copying profile link", toastOptions);
     }
   };
 

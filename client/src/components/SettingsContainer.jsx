@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Context } from "../context/Context";
 import axios from "axios";
 import LogoutWarning from "./Popups/LogoutWarning";
+import CloseAccountWarning from "./Popups/CloseAccountWarning";
 
 function SettingsContainer({ user, switchTheme }) {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function SettingsContainer({ user, switchTheme }) {
   const [isLoading, setIsLoading] = useState(false);
   const [ispLoading, setIspLoading] = useState(false);
   const [logoutWarn, setLogoutWarn] = useState(false);
+  const [accountWarn, setAccountWarn] = useState(false);
 
   const toastOptions = {
     position: "top-right",
@@ -32,7 +34,12 @@ function SettingsContainer({ user, switchTheme }) {
   };
 
   const logoutWarnFunction = () => {
+    console.log("clicked");
     setLogoutWarn(!logoutWarn);
+  };
+
+  const accountWarnFunction = () => {
+    setAccountWarn(!accountWarn);
   };
 
   const handleSubmit = async (event) => {
@@ -55,7 +62,7 @@ function SettingsContainer({ user, switchTheme }) {
         if (data.status === true) {
           dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
           navigate("/settings");
-          toast.error(data.message, toastOptions);
+          toast.success(data.message, toastOptions);
         }
       }
     } catch (error) {
@@ -86,15 +93,18 @@ function SettingsContainer({ user, switchTheme }) {
     try {
       if (handlePasswordValidation()) {
         setIspLoading(true);
-        const { data } = await axios.post(passwordSettingRoute, {
+        console.log(password);
+        const { data } = await axios.put(passwordSettingRoute, {
           password,
+          currentPassword
         });
         if (data.status === false) {
-          toast.error(data.msg, toastOptions);
-          setIspLoading(false);
+          toast.error(data.message, toastOptions);
+          setIsLoading(false);
         }
         if (data.status === true) {
           navigate("/settings");
+          toast.success(data.message, toastOptions);
         }
       }
     } catch (error) {
@@ -260,11 +270,14 @@ function SettingsContainer({ user, switchTheme }) {
               Log Out
               {logoutWarn && <LogoutWarning />}
             </button>
-            <button className="btn btn-dark btn-sm">
+            <button className="btn btn-transparent btn-sm">
               <BsToggleOn onClick={switchTheme} />
             </button>
-            <button className="btn btn-danger btn-sm">
+            <button
+              onClick={accountWarnFunction} 
+              className="btn btn-danger btn-sm">
               Close Account
+              {accountWarn && <CloseAccountWarning />}
             </button>
           </div>
         </div>
@@ -313,6 +326,14 @@ const Container = styled.div`
       border: none;
       padding: 10px 20px;
       border-radius: 10px;
+      &:focus {
+        outline: none;
+        border: none;
+      }
+      svg {
+        color: var(--secondary-color);
+        font-size: 30px;
+      }
     }
   }
 `;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
-import { userRoute, usersRoute, host } from "../utils/APIRoutes";
+import { usersRoute, host } from "../utils/APIRoutes";
 import axios from "axios";
 import { io } from "socket.io-client";
 // import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ import { Context } from "../context/Context";
 function Chat() {
   const socket = useRef();
 
-  const {user} = useContext(Context);
+  const { user } = useContext(Context);
   const [contacts, setContacts] = useState([]);
   // const [user, setCurrentUser] = useState(() => {
   //   const saved = localStorage.getItem("User");
@@ -26,10 +26,10 @@ function Chat() {
   useEffect(() => {
     document.title = "Chat - FreeChat";
   });
-                         
+
   // useEffect(() => {
   //   async function getUser() {
-      
+
   //     if (!localStorage.getItem("User")) {
   //       navigate("/login");
   //     } else {
@@ -49,14 +49,16 @@ function Chat() {
   //         }
   //       });
   //       console.log(data)
-  //     } 
+  //     }
   //     authUser()
   //   }
   // }, [user])
 
   useEffect(() => {
     if (user) {
-      socket.current = io(host);
+      socket.current = io(host, {
+        withCredentials: true,
+      });
       socket.current.emit("add-user", user._id);
     }
   }, [user]);
@@ -65,7 +67,7 @@ function Chat() {
     async function allUsers() {
       if (user) {
         const data = await axios.get(`${usersRoute}/${user._id}`);
-  
+
         setContacts(data.data);
       }
     }
@@ -82,9 +84,7 @@ function Chat() {
         <div className="chat wrapper">
           <div className="chat-container">
             <div className="row">
-              <SideNav
-                user={user}
-              />
+              <SideNav user={user} />
               <Contacts
                 contacts={contacts}
                 user={user}
