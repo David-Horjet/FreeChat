@@ -7,7 +7,7 @@
     "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
     "start": "nodemon server/server.js",
-    "dev": "node server/server.js",
+    "dev": "node server/server.js"
     
   },
   "author": "David Ojetola",
