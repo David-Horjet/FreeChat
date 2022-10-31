@@ -125,19 +125,6 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   justify-content: space-between;
 }
-.Toastify__progress-bar--success {
-  background: var(--color) !important;
-}
-.Toastify__progress-bar--error {
-  background: var(--color) !important;
-}
-.Toastify--animate-icon svg {
-  fill: var(--color);
-}
-.Toastify__toast-theme--light {
-  background: #e7e8fc !important;
-  color: var(--toastify-text-color-light);
-}
 hr {
   color: inherit;
   background-color: currentColor;

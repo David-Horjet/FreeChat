@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
-import { DiSenchatouch } from "react-icons/di";
+import logo from "../assets/images/logo2.png";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,17 +22,11 @@ function Register() {
     autoClose: "8000",
     pauseOnHover: true,
     draggable: true,
-    theme: "light",
+    theme: "error",
   };
 
   useEffect(() => {
     document.title = "Register - FreeChat";
-  });
-
-  useEffect(() => {
-    if (localStorage.getItem("chat-app-user")) {
-      navigate("/");
-    }
   });
 
   const handleSubmit = async (event) => {
@@ -96,7 +90,7 @@ function Register() {
       <FormContainer>
         <form onSubmit={(event) => handleSubmit(event)}>
           <div className="logo">
-            <DiSenchatouch />
+            <img src={logo} alt="logo" />
             <h1>
               Free<span>Chat</span>
             </h1>
@@ -154,9 +148,8 @@ const FormContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    svg {
-      color: var(--color);
-      font-size: 25px;
+    img {
+      width: 50px;
     }
     h1 {
       color: var(--secondary-color);
@@ -194,7 +187,6 @@ const FormContainer = styled.div`
       cursor: pointer;
       border-radius: 0.4rem;
       font-size: 1rem;
-      text-transform: uppercase;
       transition: 0.5s ease-in-out;
       &:hover {
         background-color: #4e0eff;
@@ -204,9 +196,7 @@ const FormContainer = styled.div`
       color: var(--secondary-color);
       a {
         color: #4e0eff;
-        text-transform: none;
         font-weight: bold;
-        text-transform: uppercase;
         text-decoration: none;
       }
     }

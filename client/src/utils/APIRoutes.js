@@ -1,4 +1,4 @@
-export const host = 'http://localhost:5000';
+export const host = 'https://freechatapi.herokuapp.com';
 export const registerRoute = `${host}/api/auth/register`;
 export const loginRoute = `${host}/api/auth/login`;
 export const setImageRoute = `${host}/api/auth/setImage`;

@@ -54,10 +54,6 @@ function SetImage() {
             toast.success(response.data.msg, toastOptions);
           }
           if (response.data.status === true) {
-            localStorage.setItem(
-              "User",
-              JSON.stringify(response.data.userData)
-            );
             navigate("/login");
           }
           if (response.data.status === false) {

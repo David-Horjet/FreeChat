@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "dev": "node server.js"
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "start": "nodemon server/server.js",
+    "dev": "node server/server.js",
+    
   },
   "author": "David Ojetola",
   "license": "ISC",

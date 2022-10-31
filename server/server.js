@@ -26,24 +26,26 @@ const {
 
 PORT = process.env.PORT;
 dbURI = process.env.dbURI;
-const corsOptions = {
-     origin: 'https://freechatt.netlify.app',
-     credentials: true,
-     optionSuccessStatus: 200
-}
+DEPLOY = process.env.NODE_ENV;
+// const corsOptions = {
+//      origin: 'https://freechat-henna.vercel.app',
+//      credentials: true
+// }
 
 const app = express();
 
 app.use(newSession);
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 app.use("/public/", express.static('./public'));
 app.use((req, res, next) => {
      res.locals.user = req.session.user;
      next();
 })
 
-
+if(DEPLOY === "production") {
+     app.use(express.static("client/build"))
+}
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
@@ -66,16 +68,12 @@ const server = app.listen(PORT, (req, res) => {
 })
 
 const io = socket(server, {
-     handlePreflightRequest: (req, res) => {
-         const headers = {
-             "Access-Control-Allow-Headers": "Content-Type, Authorization",
-             "Access-Control-Allow-Origin": req.headers.origin, 
-             "Access-Control-Allow-Credentials": true
-         };
-         res.writeHead(200, headers);
-         res.end();
-     }
- });
+     cors: {
+          //origin: "http://localhost:3000", //development
+          origin: "https://freechat-henna.vercel.app", //deployment
+          credentials: true,
+        },
+});
 
 global.onlineUsers = new Map();
 
