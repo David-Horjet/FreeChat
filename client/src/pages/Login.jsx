@@ -52,7 +52,7 @@ function Login() {
       }
     } catch (error) {
       dispatch({ type: "LOGIN_FAILURE" });
-      toast.error("Network Error", toastOptions);
+      toast.error("Internal server error occured", toastOptions);
     }
   };
 

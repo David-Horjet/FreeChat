@@ -54,7 +54,7 @@ function Register() {
       }
     } catch (error) {
       toast.error(
-        "Network Error, Check your network connection and try again",
+        "Internal server error occured",
         toastOptions
       );
       setIsLoading(false);

@@ -134,6 +134,30 @@ hr {
 hr:not([size]) {
   height: 1px;
 }
+.Toastify__toast-container {
+  width: 250px !important;
+}
+.Toastify__toast-container svg {
+  fill: #ffffff !important;
+}
+.Toastify__toast-container {
+  width: 300px !important;
+  margin-top: 5px;
+  border-radius: 5px;
+}
+.Toastify__toast-theme--light {
+  background: #E74C3C !important;
+  color: #ffffff !important;
+}
+.Toastify__progress-bar--error {
+  background: #ffffff !important;
+}
+@media only screen and (max-width: 480px) {
+  .Toastify__toast-container {
+    width: 300px !important;
+    margin-top: 10px !important;
+}
+}
 .h1,
 .h2,
 .h3,
