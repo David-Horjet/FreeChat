@@ -50,6 +50,7 @@ function SettingsContainer({ user, switchTheme }) {
         const { data } = await axios.put(
           `${profileSettingRoute}/${user._id}`,
           {
+            user,
             username,
             email,
             about,
@@ -61,8 +62,10 @@ function SettingsContainer({ user, switchTheme }) {
         }
         if (data.status === true) {
           dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
-          navigate("/settings");
-          toast.success(data.message, toastOptions);
+          toast.success(`${data.message}, You will need to log in again to authorize changes`, toastOptions);
+          setTimeout(() => {
+            navigate("/login");
+          }, 5000);
         }
       }
     } catch (error) {

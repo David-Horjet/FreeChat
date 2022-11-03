@@ -7,7 +7,6 @@
   list-style: none;
   text-decoration: none;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  overflow: hidden;
 } 
 
 :root {
@@ -80,6 +79,7 @@
   --lowOpacity-primary-color: #ffffff51 !important;
   --faded-secondary-color: #14191e !important;
   --faded-primary-color: #F0F2F5 !important;
+  --gray: #54656F;
 }
 
 [data-theme='dark'] {
@@ -89,6 +89,7 @@
   --lowOpacity-secondary-color: #ffffff51 !important;
   --faded-primary-color: #242526 !important;
   --faded-secondary-color: #adadad !important;
+  --gray: #8696A0;
  }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -145,11 +146,18 @@ hr:not([size]) {
   margin-top: 5px;
   border-radius: 5px;
 }
-.Toastify__toast-theme--light {
+.Toastify__toast--error {
   background: #E74C3C !important;
   color: #ffffff !important;
 }
+.Toastify__toast--success {
+  background: #07bc0c !important;
+  color: #ffffff !important;
+}
 .Toastify__progress-bar--error {
+  background: #ffffff !important;
+}
+.Toastify__progress-bar--success {
   background: #ffffff !important;
 }
 @media only screen and (max-width: 480px) {
@@ -5449,7 +5457,7 @@ fieldset:disabled .btn {
     margin: auto;
   }
   .sideNav .side-navbar li {
-    padding: 15px 20px !important;
+    padding: 8px 15px !important;
   }
   .contacts-container {
     flex: 0 0 auto !important;
@@ -5479,6 +5487,7 @@ fieldset:disabled .btn {
   .settingsContainer {
     flex: 0 0 auto !important;
     width: 100% !important;
+    margin: 70px 0 0 0;
   }
 }
 @media (max-width: 575.98px) {
@@ -5515,6 +5524,7 @@ fieldset:disabled .btn {
   }
   .sideNav .side-navbar ul {
     width: 100% !important;
+    background: var(--primary-color);
     position: fixed;
     padding: 15px;
     z-index: 99;
@@ -5554,6 +5564,16 @@ fieldset:disabled .btn {
     z-index: 99;
     right: 0;
     left: 0;
+    margin: 0;
+    height: 100vh;
+  }
+  .settingsContainer {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin: 0 0 70px 0;
+  }
+  .settingsContainer .danger-row {
+    margin: 0 0 70px 0;
   }
 }
 @media (max-width: 767.98px) {

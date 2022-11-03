@@ -6,7 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Context } from "../context/Context";
 import axios from "axios";
 import { loginRoute } from "../utils/APIRoutes";
-import logo from "../assets/images/logo2.png"
+import logo from "../assets/images/logo2.png";
+import RoundLoader from "../components/Loaders/RoundLoader";
 
 function Login() {
   const navigate = useNavigate();
@@ -24,8 +25,8 @@ function Login() {
   };
 
   useEffect(() => {
-    document.title = "Login - FreeChat"
-  })
+    document.title = "Login - FreeChat";
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -46,7 +47,7 @@ function Login() {
           localStorage.setItem("token", JSON.stringify(res.data.token));
           toast.success(res.data.msg, toastOptions);
           setTimeout(() => {
-            navigate("/")
+            navigate("/");
           }, 3000);
         }
       }
@@ -79,26 +80,36 @@ function Login() {
       <FormContainer>
         <form onSubmit={(event) => handleSubmit(event)}>
           <div className="logo">
-            <img src={logo} alt="logo"/>
+            <img src={logo} alt="logo" />
             <h1>
               Free<span>Chat</span>
             </h1>
           </div>
-          <input
-            type="text"
-            placeholder="Username"
-            name="username"
-            onChange={(e) => handleChange(e)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={(e) => handleChange(e)}
-          />
-          {isFetching ?
-           (<button type="submit" disabled >Please wait...</button>) :
-           (<button type="submit">Log in</button>)}
+          <div className="username">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              placeholder="Horjet"
+              name="username"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div className="password">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="********"
+              name="password"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          {isFetching ? (
+            <button type="submit" disabled>
+              <RoundLoader/>
+            </button>
+          ) : (
+            <button type="submit">Log in</button>
+          )}
           <span>
             Don't have an account ? <Link to={"/register"}>Register</Link>
           </span>
@@ -114,10 +125,10 @@ const FormContainer = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   align-items: center;
   background-color: var(--faded-primary-color);
   justify-content: center;
+  overflow-y: auto;
   .logo {
     display: flex;
     align-items: center;
@@ -136,27 +147,33 @@ const FormContainer = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
     background: var(--primary-color);
     border-radius: 10px;
     padding: 2rem 3rem;
+    label {
+      color: var(--faded-secondary-color);
+      font-size: small;
+    }
     input {
       background: var(--faded-primary-color);
-      padding: 0.6rem;
-      border: 0.1rem solid #d9d8d8;
+      padding: 0.4rem;
+      margin-bottom: 10px;
+      border: none;
+      outline: none;
       border-radius: 0.4rem;
       color: var(--secondary-color);
       width: 100%;
       font-size: 1rem;
     }
     &:focus {
-      border: none !important;
-      outline: none !important;
+      border: none;
+      outline: none;
     }
     button {
       background: var(--gradient);
       color: white;
-      padding: 1rem 1.5rem;
+      padding: 10px 0;
+      margin: 10px 0;
       border: none;
       font-weight: bold;
       cursor: pointer;

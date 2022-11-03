@@ -8,13 +8,13 @@ import { setImageRoute } from "../utils/APIRoutes";
 import { BsPersonCircle } from "react-icons/bs";
 import { DiSenchatouch } from "react-icons/di";
 import { Context } from "../context/Context";
+import RoundLoader from "../components/Loaders/RoundLoader";
 
 function SetImage() {
-  const user = useContext(Context);
+  const { user, dispatch, isFetching } = useContext(Context);
   const navigate = useNavigate();
   const [image, setImage] = useState({ preview: "", data: "" });
   const inputRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [about, setAbout] = useState("");
 
   const toastOptions = {
@@ -33,7 +33,7 @@ function SetImage() {
     e.preventDefault();
     try {
       if (handleValidation()) {
-        setIsLoading(true);
+        dispatch({ type: "LOGIN_START" });
         let formData = new FormData();
         if (image.data) {
           formData.append("image", image.data);
@@ -49,11 +49,11 @@ function SetImage() {
             formData,
             config
           );
-          console.log(response);
           if (response) {
             toast.success(response.data.msg, toastOptions);
           }
           if (response.data.status === true) {
+            dispatch({ type: "LOGIN_SUCCESS", payload: response.data.user });
             navigate("/login");
           }
           if (response.data.status === false) {
@@ -61,19 +61,17 @@ function SetImage() {
               "An error occured while setting up your profile pic",
               toastOptions
             );
-            setIsLoading(false);
+            isFetching(false);
           }
         } else {
           toast.error("Please choose a profile pic", toastOptions);
-          setIsLoading(false);
+          isFetching(false);
         }
       }
     } catch (error) {
-      toast.error(
-        "Network Error,Please check your network connection and try again",
-        toastOptions
-      );
-      setIsLoading(false);
+      dispatch({ type: "LOGIN_FAILURE" });
+      toast.error("Internal server error occured", toastOptions);
+      console.log(error)     
     }
   };
 
@@ -121,7 +119,10 @@ function SetImage() {
             </div>
           )}
           {image.preview && (
-            <div className="avatar-img py-3 d-flex justify-content-center">
+            <div
+              onClick={handleClick}
+              className="avatar-img py-3 d-flex justify-content-center"
+            >
               <img
                 src={image.preview}
                 width="100"
@@ -142,18 +143,15 @@ function SetImage() {
             className="form-control"
             rows="4"
             onChange={(e) => setAbout(e.target.value)}
-            placeholder="Tell the world about Yourself"
+            placeholder="Tell the world about yourself"
           />
           <span className="limit">Character Limit: 200</span>
-          {!isLoading && <button type="submit">Submit</button>}
-          {isLoading && (
+          {!isFetching && <button type="submit">Submit</button>}
+          {isFetching && (
             <button disabled type="submit">
-              Submitting...
+              <RoundLoader />
             </button>
           )}
-          <span>
-            Already have an account ? <Link to={"/login"}>Login</Link>
-          </span>
         </form>
       </FormContainer>
       <ToastContainer />
@@ -199,6 +197,7 @@ const FormContainer = styled.div`
     width: 160px;
     height: 160px;
     border-radius: 50%;
+    object-fit: cover;
   }
   form {
     display: flex;
@@ -214,20 +213,19 @@ const FormContainer = styled.div`
       color: var(--secondary-color);
       width: 100%;
       font-size: 1rem;
-    }
-    &:focus {
-      border: none;
-      outline: none;
+      &:focus {
+        border: none;
+        outline: none;
+      }
     }
     textarea {
       border: none;
-      border-bottom: 1px solid var(--faded-secondary-color);
       background: var(--faded-primary-color);
       color: var(--secondary-color);
-    }
-    &:focus {
-      border: none;
-      outline: none;
+      &:focus {
+        border: none;
+        outline: none;
+      }
     }
     .limit {
       color: var(--faded-secondary-color);
@@ -235,16 +233,20 @@ const FormContainer = styled.div`
     button {
       background: var(--gradient);
       color: white;
-      padding: 1rem 1.5rem;
+      padding: 10px 0;
+      margin: 10px 0;
       border: none;
       font-weight: bold;
       cursor: pointer;
       border-radius: 0.4rem;
       font-size: 1rem;
-      text-transform: uppercase;
-      transition: 0.5s ease-in-out;
+      transition: 0.3s all;
       &:hover {
-        background-color: #4e0eff;
+        background: #4e0eff;
+      }
+      &:disabled {
+        cursor: not-allowed;
+        background: #946dff;
       }
     }
     span {

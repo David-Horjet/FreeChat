@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Context } from "../context/Context";
 import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
 import logo from "../assets/images/logo2.png";
+import RoundLoader from "../components/Loaders/RoundLoader";
 
 function Register() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const { dispatch, isFetching } = useContext(Context);
 
   const toastOptions = {
     position: "top-right",
@@ -33,7 +35,7 @@ function Register() {
     event.preventDefault();
     try {
       if (handleValidation()) {
-        setIsLoading(true);
+        dispatch({ type: "LOGIN_START" });
         const { password, username, email } = values;
         console.log({ password, username, email });
         const { data } = await axios.post(registerRoute, {
@@ -41,23 +43,19 @@ function Register() {
           email,
           password,
         });
-        console.log(data);
         if (data.status === false) {
           toast.error(data.message, toastOptions);
-          setIsLoading(false);
+          isFetching(false);
         }
         if (data.status === true) {
-          localStorage.setItem("User", JSON.stringify(data.user));
+          dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
           localStorage.setItem("token", JSON.stringify(data.token));
           navigate("/setimage");
         }
       }
     } catch (error) {
-      toast.error(
-        "Internal server error occured",
-        toastOptions
-      );
-      setIsLoading(false);
+      dispatch({ type: "LOGIN_FAILURE" });
+      toast.error("Internal server error occured", toastOptions);
     }
   };
 
@@ -95,34 +93,47 @@ function Register() {
               Free<span>Chat</span>
             </h1>
           </div>
-          <input
-            type="text"
-            placeholder="Username"
-            name="username"
-            onChange={(e) => handleChange(e)}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            onChange={(e) => handleChange(e)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={(e) => handleChange(e)}
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            name="confirmPassword"
-            onChange={(e) => handleChange(e)}
-          />
-          {!isLoading && <button type="submit">Create Account</button>}
-          {isLoading && (
+          <div className="username">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              placeholder="Horjet"
+              name="username"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div className="email">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              placeholder="horjet@gmail.com"
+              name="email"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div className="password">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="********"
+              name="password"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div className="cpassword">
+            <label htmlFor="cpassword">Confirm Password</label>
+            <input
+              type="password"
+              placeholder="********"
+              name="confirmPassword"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          {!isFetching ? (
+            <button type="submit">Sign up</button>
+          ) : (
             <button disabled type="submit">
-              Creating Account...
+              <RoundLoader />
             </button>
           )}
           <span>
@@ -140,10 +151,10 @@ const FormContainer = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   align-items: center;
   background-color: var(--faded-primary-color);
   justify-content: center;
+  overflow-y: auto;
   .logo {
     display: flex;
     align-items: center;
@@ -153,7 +164,7 @@ const FormContainer = styled.div`
     }
     h1 {
       color: var(--secondary-color);
-      font-size: 30px;
+      font-size: 25px;
       span {
         color: var(--color);
       }
@@ -162,14 +173,19 @@ const FormContainer = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
     background-color: var(--primary-color);
     border-radius: 10px;
     padding: 2rem 3rem;
+    label {
+      color: var(--faded-secondary-color);
+      font-size: small;
+    }
     input {
       background: var(--faded-primary-color);
-      padding: 0.6rem;
-      border: 0.1rem solid #d9d8d8;
+      padding: 0.4rem;
+      margin-bottom: 10px;
+      border: none;
+      outline: none;
       border-radius: 0.4rem;
       color: var(--secondary-color);
       width: 100%;
@@ -177,19 +193,25 @@ const FormContainer = styled.div`
     }
     &:focus {
       border: none;
+      outline: none;
     }
     button {
       background: var(--gradient);
       color: white;
-      padding: 1rem 1.5rem;
+      padding: 10px 0;
+      margin: 10px 0;
       border: none;
       font-weight: bold;
       cursor: pointer;
       border-radius: 0.4rem;
       font-size: 1rem;
-      transition: 0.5s ease-in-out;
+      transition: 0.3s all;
       &:hover {
-        background-color: #4e0eff;
+        background: #4e0eff;
+      }
+      &:disabled {
+        cursor: not-allowed;
+        background: #946dff;
       }
     }
     span {

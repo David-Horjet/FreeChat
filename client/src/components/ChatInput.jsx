@@ -29,7 +29,7 @@ function ChatInput({ handleSendMsg }) {
 
   return (
     <Container className="h-10">
-      <div className="px-1 w-100 d-flex align-items-center">
+      <div className="px-1 w-100 d-flex justify-content-center align-items-center">
         <div className="button-container">
           <div className="emoji me-2">
             <BsEmojiSmileFill onClick={handleEmojiPicker} />
@@ -38,13 +38,13 @@ function ChatInput({ handleSendMsg }) {
         </div>
 
         <form
-          className="comment-me w-100 d-flex align-items-center"
+          className="comment-me d-flex align-items-center"
           onSubmit={(e) => sendChat(e)}
         >
           <input
             type="text"
             className="form-control pe-4"
-            placeholder="Type something Dont be shy 😉"
+            placeholder="Type something Baba"
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
@@ -60,7 +60,7 @@ function ChatInput({ handleSendMsg }) {
 
 const Container = styled.div`
   svg {
-    color: var(--color);
+    color: var(--gray);
     font-size: 25px;
     cursor: pointer;
     position: relative;
@@ -82,7 +82,7 @@ const Container = styled.div`
   }
 
   .emoji-picker-react .emoji-categories button {
-    background-color: var(--color);
+    background-color: var(--gray);
   }
 
   .emoji-scroll-wrapper::-webkit-scrollbar {
@@ -91,16 +91,16 @@ const Container = styled.div`
   }
 
   .emoji-scroll-wrapper::-webkit-scrollbar-thumb {
-    background-color: var(--color);
+    background-color: var(--gray);
   }
   form {
-    border: 1px solid var(--faded-secondary-color);
+    background: var(--primary-color);
     border-radius: 30px;
-    width: 80%;
+    width: 92%;
     padding: 0 5px;
   }
   .form-control {
-    background: transparent;
+    background: var(--primary-color);
     border: none;
     color: var(--secondary-color);
     outline: none;

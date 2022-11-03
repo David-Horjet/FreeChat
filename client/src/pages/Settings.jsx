@@ -36,9 +36,6 @@ function Settings({switchTheme}) {
 }
 
 const Container = styled.div`
-  * {
-    overflow-x: hidden;
-  }
   .chat {
     display: flex;
     flex-direction: column;

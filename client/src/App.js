@@ -27,7 +27,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/register" element={user ? <Chat /> : <Register/>} />
-            <Route path="/setimage" element={user ? <SetImage /> : <Login/>} />
+            <Route path="/setimage" element={user ? <SetImage /> :<Login />} />
             <Route path="/login" element={user ? <Chat /> : <Login/>} />
             <Route path="/settings" element={user ? <Settings switchTheme={switchTheme} /> : <Login/>} />
             <Route path="/:username" element={user ? <Profile /> : <Login/>} />
