@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { host } from "../utils/APIRoutes";
 import { Link } from "react-router-dom";
 import { BsFillGridFill, BsSearch } from "react-icons/bs";
-import RoundLoader from "./Loaders/RoundLoader";
+import Contact from "./Contact";
 
-function Contacts({ contacts, changeChat, user }) {
+function Contacts({ contacts, changeChat, user, isLoading }) {
   const [currentSelected, setCurrentSelected] = useState(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (contacts.length <= 0) {
-      setIsLoading(true);
-    }
-  }, [contacts]);
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
     changeChat(contact);
@@ -28,7 +20,10 @@ function Contacts({ contacts, changeChat, user }) {
               <div className="card-head">
                 <div className=" d-flex justify-content-between align-items-center">
                   <h1 className="h5 mb-0">Chats</h1>
-                  <Link to={`/${user.username}`} className="dropend position-relative">
+                  <Link
+                    to={`/${user.username}`}
+                    className="dropend position-relative"
+                  >
                     <BsFillGridFill />
                   </Link>
                 </div>
@@ -53,51 +48,14 @@ function Contacts({ contacts, changeChat, user }) {
                 <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
                   <div className="h-100 custom-scrollbar">
                     <div className="chat-tab-list custom-scrollbar">
-                      {isLoading ? (
-                        <ul className="nav flex-column nav-pills nav-pills-soft">
-                          {contacts.map((contact, index) => {
-                            return (
-                              <li
-                                className={`contact ${
-                                  index === currentSelected ? "selected" : ""
-                                }`}
-                                key={index}
-                                onClick={() =>
-                                  changeCurrentChat(index, contact)
-                                }
-                                data-bs-dismiss="offcanvas"
-                              >
-                                <button
-                                  className="nav-link text-start w-100"
-                                  id="chat-1-tab"
-                                  data-bs-toggle="pill"
-                                  role="tab"
-                                >
-                                  <div className="d-flex">
-                                    <div className="flex-shrink-0 avatar avatar-story me-2 status-online">
-                                      <img
-                                        className="avatar-img rounded-circle"
-                                        src={`${host}/${contact.image}`}
-                                        alt="user-pic"
-                                      />
-                                    </div>
-                                    <div className="flex-grow-1 d-block">
-                                      <h6 className="mb-0 mt-1">
-                                        {contact.username}
-                                      </h6>
-                                      <div className="small text-secondary">
-                                        Frances sent a photo.
-                                      </div>
-                                    </div>
-                                  </div>
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      ) : (
-                        <RoundLoader />
-                      )}
+                      <ul className="nav flex-column nav-pills nav-pills-soft">
+                            <Contact
+                              contacts={contacts}
+                              currentSelected={currentSelected}
+                              isLoading={isLoading}
+                              changeCurrentChat={changeCurrentChat}
+                            />
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -187,8 +145,8 @@ const Container = styled.div`
   }
 
   .avatar {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
 
   img {
@@ -249,7 +207,12 @@ const Container = styled.div`
       padding: 8px;
       background-color: var(--faded-primary-color);
       border-radius: 10px;
+      h6 {
+        font-size: 15px;
+        color: var(--secondary-color);
+      }
       .small {
+        font-size: 10px;
         color: var(--faded-secondary-color) !important;
       }
     }
@@ -260,10 +223,6 @@ const Container = styled.div`
         border: none;
       }
     }
-  }
-
-  h6 {
-    color: var(--secondary-color);
   }
 `;
 

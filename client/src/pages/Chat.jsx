@@ -16,6 +16,7 @@ function Chat() {
 
   const { user } = useContext(Context);
   const [contacts, setContacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   // const [user, setCurrentUser] = useState(() => {
   //   const saved = localStorage.getItem("User");
   //   const initialValue = JSON.parse(saved);
@@ -64,8 +65,11 @@ function Chat() {
   useEffect(() => {
     async function allUsers() {
       if (user) {
+        setIsLoading(true);
         const data = await axios.get(`${usersRoute}/${user._id}`);
-
+        if (data.data) {
+          setIsLoading(false);
+        }
         setContacts(data.data);
       }
     }
@@ -87,6 +91,7 @@ function Chat() {
                 contacts={contacts}
                 user={user}
                 changeChat={handleChatChange}
+                isLoading={isLoading}
               />
               {currentChat === undefined ? (
                 <Welcome user={user} />
@@ -95,6 +100,7 @@ function Chat() {
                   currentChat={currentChat}
                   user={user}
                   socket={socket}
+                  setCurrentChat={setCurrentChat}
                 />
               )}
             </div>

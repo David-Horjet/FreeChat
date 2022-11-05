@@ -36,7 +36,7 @@ const Container = styled.div`
     text-align: center;
     color: var(--faded-secondary-color);
     h1 {
-      font-size: 60px;
+      font-size: 100px;
       color: var(--secondary-color);
     }
     button {

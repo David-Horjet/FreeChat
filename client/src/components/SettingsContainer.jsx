@@ -9,6 +9,7 @@ import { Context } from "../context/Context";
 import axios from "axios";
 import LogoutWarning from "./Popups/LogoutWarning";
 import CloseAccountWarning from "./Popups/CloseAccountWarning";
+import RoundLoader from "../components/Loaders/RoundLoader";
 
 function SettingsContainer({ user, switchTheme }) {
   const navigate = useNavigate();
@@ -47,25 +48,24 @@ function SettingsContainer({ user, switchTheme }) {
     try {
       if (handleValidation()) {
         setIsLoading(true);
-        const { data } = await axios.put(
-          `${profileSettingRoute}/${user._id}`,
-          {
-            user,
-            username,
-            email,
-            about,
-          }
-        );
+        const { data } = await axios.put(`${profileSettingRoute}/${user._id}`, {
+          user,
+          username,
+          email,
+          about,
+        });
         if (data.status === false) {
           toast.error(data.message, toastOptions);
           setIsLoading(false);
         }
         if (data.status === true) {
-          dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
-          toast.success(`${data.message}, You will need to log in again to authorize changes`, toastOptions);
+          toast.success(
+            `${data.message}, You will need to log in again to authorize changes`,
+            toastOptions
+          );
           setTimeout(() => {
-            navigate("/login");
-          }, 5000);
+            dispatch({ type: "LOGOUT" });
+          }, 3000);
         }
       }
     } catch (error) {
@@ -97,17 +97,21 @@ function SettingsContainer({ user, switchTheme }) {
       if (handlePasswordValidation()) {
         setIspLoading(true);
         console.log(password);
-        const { data } = await axios.put(passwordSettingRoute, {
-          password,
-          currentPassword
-        });
+        const { data } = await axios.put(
+          `${passwordSettingRoute}/${user._id}`,
+          {
+            password,
+            currentPassword,
+          }
+        );
         if (data.status === false) {
           toast.error(data.message, toastOptions);
-          setIsLoading(false);
+          setIspLoading(false);
         }
         if (data.status === true) {
           navigate("/settings");
           toast.success(data.message, toastOptions);
+          setIspLoading(false);
         }
       }
     } catch (error) {
@@ -186,20 +190,19 @@ function SettingsContainer({ user, switchTheme }) {
                   />
                 </div>
                 <div className="col-12 text-end">
-                  {!isLoading && (
+                  {!isLoading ? (
                     <button
                       type="submit"
                       className="btn btn-sm btn-primary mb-0"
                     >
                       Save changes
                     </button>
-                  )}
-                  {isLoading && (
+                  ):(
                     <button
                       type="submit"
                       className="btn btn-sm btn-primary mb-0"
                     >
-                      Saving......
+                      <RoundLoader/>
                     </button>
                   )}
                 </div>
@@ -244,20 +247,19 @@ function SettingsContainer({ user, switchTheme }) {
                   />
                 </div>
                 <div className="col-12 text-end">
-                  {!ispLoading && (
+                  {!ispLoading ? (
                     <button
                       type="submit"
                       className="btn btn-sm btn-primary mb-0"
                     >
                       Update password
                     </button>
-                  )}
-                  {ispLoading && (
+                  ) : (
                     <button
                       type="submit"
                       className="btn btn-sm btn-primary mb-0"
                     >
-                      Updating........
+                      <RoundLoader/>
                     </button>
                   )}
                 </div>
@@ -277,8 +279,9 @@ function SettingsContainer({ user, switchTheme }) {
               <BsToggleOn onClick={switchTheme} />
             </button>
             <button
-              onClick={accountWarnFunction} 
-              className="btn btn-danger btn-sm">
+              onClick={accountWarnFunction}
+              className="btn btn-danger btn-sm"
+            >
               Close Account
               {accountWarn && <CloseAccountWarning />}
             </button>
@@ -305,12 +308,14 @@ const Container = styled.div`
   form {
     label {
       color: var(--faded-secondary-color);
+      font-size: 15px;
     }
     .form-control {
       background-color: transparent;
       border: 1px solid var(--faded-secondary-color);
       outline: none;
       color: var(--secondary-color);
+      font-size: 15px;
     }
     &:focus {
       border: none;

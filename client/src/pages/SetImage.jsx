@@ -49,12 +49,12 @@ function SetImage() {
             formData,
             config
           );
-          if (response) {
-            toast.success(response.data.msg, toastOptions);
-          }
           if (response.data.status === true) {
+            toast.success(`${response.data.msg}, Sorry you will need to login again to save changes`, toastOptions);
             dispatch({ type: "LOGIN_SUCCESS", payload: response.data.user });
-            navigate("/login");
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
           }
           if (response.data.status === false) {
             toast.error(

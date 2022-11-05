@@ -36,6 +36,8 @@ const Container = styled.div`
   transition: 0.3s ease-in-out;
   h6 {
     color: var(--secondary-color);
+    font-size: 15px;
+    line-height: 30px;
   }
   .row {
     gap: 30px;

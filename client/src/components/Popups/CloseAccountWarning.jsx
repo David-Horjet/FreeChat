@@ -8,8 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function CloseAccountWarning() {
-  const { user } = useContext(Context);
-  const navigate = useNavigate();
+  const { user,dispatch } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const toastOptions = {
     position: "top-right",
@@ -28,8 +27,10 @@ function CloseAccountWarning() {
         setIsLoading(false);
       }
       if (data.status === true) {
-        navigate("/settings");
         toast.success(data.message, toastOptions);
+        setTimeout(() => {
+          dispatch({type: "LOGOUT"});
+        }, 5000);
       }
     } catch (error) {
       toast.error(
@@ -53,7 +54,7 @@ function CloseAccountWarning() {
             </button>
           </div>
           <div className="col-5">
-            {isLoading ? (
+            {!isLoading ? (
               <button onClick={handleUerDelete} className="btn btn-danger">
                 Continue
               </button>
@@ -90,6 +91,8 @@ const Container = styled.div`
   transition: 0.3s ease-in-out;
   h6 {
     color: var(--secondary-color);
+    font-size: 15px;
+    line-height: 30px;
   }
   .row {
     gap: 30px;

@@ -1,19 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { host } from "../utils/APIRoutes";
 
 function Welcome({ user }) {
-
   return (
     <>
       <Container className="welcome-chat">
         <div className="card card-chat ">
           <div className="card-body h-100">
-            <h1 className="text-center">
-              Welcome <span>Back</span> {user.username} 😃
-            </h1>
-            <h5 className="text-center">
-              Select a friend to start conversation{" "}
-            </h5>
+            <div className="d-flex justify-content-center">
+              <Link to={`/${user.username}`} className="avatar">
+                <img src={`${host}/${user.image}`} alt="" />
+              </Link>
+            </div>
+            <h3 className="text-center">
+              Welcome <span>Back</span> {user.username}
+            </h3>
+            <p className="text-center">
+              Please select a user to start chatting{" "}
+            </p>
           </div>
         </div>
       </Container>
@@ -26,14 +32,28 @@ const Container = styled.div`
   width: 68.66666667%;
   background-color: var(--faded-primary-color);
 
-  h1 {
-    font-family: Arial, Helvetica, sans-serif !important;
-    color: #ffffff;
+  .avatar {
+    width: 60px;
+    height: 60px;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      object-fit: cover;
+    }
+  }
+
+  h3 {
+    margin-top: 20px;
+    color: var(--secondary-color);
     overflow: hidden;
   }
 
-  h5 {
-    font-family: "Times New Roman", Times, serif !important;
+  p {
+    margin-top: 10px;
+    color: var(--faded-secondary-color);
   }
 
   .card {

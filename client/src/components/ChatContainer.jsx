@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillAudio } from "react-icons/ai";
 import ChatInput from "./ChatInput";
@@ -10,10 +10,10 @@ import {
 } from "../utils/APIRoutes";
 import axios from "axios";
 import { v4 as uuid4 } from "uuid";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsArrowLeft, BsThreeDotsVertical } from "react-icons/bs";
 import { FaVideo } from "react-icons/fa";
 
-function ChatContainer({ currentChat, user, socket }) {
+function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
   const image = `${host}/${currentChat.image}`;
 
   const [messages, setMessages] = useState([]);
@@ -67,7 +67,11 @@ function ChatContainer({ currentChat, user, socket }) {
     scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
 
-  console.log(messages)
+  console.log(messages);
+
+  const handleBack = () => {
+    setCurrentChat(undefined);
+  };
 
   return (
     <>
@@ -82,22 +86,30 @@ function ChatContainer({ currentChat, user, socket }) {
                 aria-labelledby="chat-1-tab"
               >
                 <div className="border-bottom p-2 d-flex justify-content-between align-items-center">
-                  <Link to={`/${currentChat.username}`} className="d-flex mb-2 mb-sm-0">
-                    <div className="flex-shrink-0 avatar me-2">
-                      <img
-                        className="avatar-img rounded-circle"
-                        src={image}
-                        alt=""
-                      />
+                  <div className="d-flex align-items-center">
+                    <div className="back">
+                      <BsArrowLeft onClick={handleBack} />
                     </div>
-                    <div className="d-block flex-grow-1">
-                      <h6 className="mb-0 mt-1">{currentChat.username}</h6>
-                      <div className="small text-secondary">
-                        <i className="fa-solid fa-circle text-success me-1"></i>
-                        Online
+                    <Link
+                      to={`/${currentChat.username}`}
+                      className="d-flex mb-2 mb-sm-0"
+                    >
+                      <div className="flex-shrink-0 avatar me-2">
+                        <img
+                          className="avatar-img rounded-circle"
+                          src={image}
+                          alt=""
+                        />
                       </div>
-                    </div>
-                  </Link>
+                      <div className="d-block flex-grow-1">
+                        <h6 className="mb-0 mt-1">{currentChat.username}</h6>
+                        <div className="small text-secondary">
+                          <i className="fa-solid fa-circle text-success me-1"></i>
+                          Online
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
                   <div className="call d-flex align-items-center">
                     {/* <!-- Call button --> */}
                     <a
@@ -141,14 +153,20 @@ function ChatContainer({ currentChat, user, socket }) {
                             <div className="d-flex flex-column align-items-start">
                               <div className="message p-2 px-3 rounded-2">
                                 {message.message}
-                                <span>
-                                  {new Date(message.time).getHours()}:
-                                  {new Date(message.time).getMinutes()}
-                                </span>
                               </div>
                             </div>
                           </div>
                         </div>
+                        <span>
+                          {message.time ? (
+                            <div>
+                              {new Date(message.time).getHours()}:
+                              {new Date(message.time).getMinutes()}
+                            </div>
+                          ) : (
+                            <div>Just now</div>
+                          )}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -198,6 +216,14 @@ const Container = styled.div`
     padding: 20px;
   }
 
+  .back {
+    margin-right: 20px;
+    svg {
+      color: var(--secondary-color);
+      font-size: 20px;
+    }
+  }
+
   .chat-conversation-content .sended {
     justify-content: flex-end !important;
   }
@@ -208,15 +234,17 @@ const Container = styled.div`
   }
 
   .chat-conversation-content .sended .message-body {
-    border-radius: 15px;
+    border-radius: 8px;
     border-top-right-radius: 0px;
     background: var(--gradient);
+    font-size: 12px;
   }
 
   .chat-conversation-content .received .message-body {
-    border-radius: 10px;
-    border-bottom-left-radius: 0px;
+    border-radius: 8px;
+    border-top-left-radius: 0px;
     background-color: var(--color);
+    font-size: 12px;
   }
 
   .chat-conversation-content .message {
@@ -224,9 +252,10 @@ const Container = styled.div`
   }
 
   .chat-conversation-content span {
-    font-size: 11px;
+    font-size: 10px;
     padding-top: 15px;
     padding-left: 5px;
+    color: var(--secondary-color);
   }
 `;
 

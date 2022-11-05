@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { BiCopy } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import { host } from "../utils/APIRoutes";
+import { FaPencilAlt } from "react-icons/fa";
 
 function ProfileContainer({ profile, user }) {
   const image = `${host}/${profile.image}`;
@@ -29,13 +30,17 @@ function ProfileContainer({ profile, user }) {
   const copyUsernameLink = async () => {
     try {
       await navigator.clipboard.writeText(
-        `https://freechatt.netlify.app//${profile.username}`
+        `https://freechatt.netlify.app/${profile.username}`
       );
       toast.success("Profile link successfully copied", toastOptions);
     } catch (err) {
       toast.error("An error occured copying profile link", toastOptions);
     }
   };
+
+  const handleAddFriend = () => {
+    alert("Coming in the next update")
+  }
 
   return (
     <>
@@ -47,6 +52,13 @@ function ProfileContainer({ profile, user }) {
                 <div className="cover-bg"></div>
                 <div className="avatar">
                   <img src={image} className="w-100 h-100" alt="profile-pic" />
+                  {!publicProfile && (
+                    <div className="edit">
+                      <Link to="/setimage">
+                        <FaPencilAlt /> Edit
+                      </Link>
+                    </div>
+                  )}
                 </div>
                 <h2 className="name mt-3">{profile.username}</h2>
                 <div className="about d-flex flex-row justify-content-center align-items-center mt-3">
@@ -65,8 +77,8 @@ function ProfileContainer({ profile, user }) {
                 </div>
                 {publicProfile && (
                   <div className=" d-flex mt-2">
-                    <button>
-                      <Link to={"/settings"}>Add Friend</Link>
+                    <button onClick={handleAddFriend}>
+                      <Link to="">Add Friend</Link>
                     </button>
                   </div>
                 )}
@@ -125,12 +137,28 @@ const Container = styled.div`
   }
   .avatar {
     margin-top: -50px;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    position: relative;
     img {
       border-radius: 50%;
       object-fit: cover;
       overflow: hidden;
+    }
+    .edit {
+      position: absolute;
+      margin: -40px -40px 0 0;
+      width: 100%;
+      a {
+        background: var(--gradient);
+        padding: 8px;
+        justify-content: flex-end;
+        float: right;
+        border-radius: 5px;
+        font-size: 10px;
+        color: var(--secondary-color);
+      }
     }
   }
   .name {
@@ -144,9 +172,11 @@ const Container = styled.div`
   .uname {
     color: var(--color);
   }
-  svg {
-    color: var(--lowOpacity-secondary-color);
-    cursor: pointer;
+  span {
+    svg {
+      color: var(--lowOpacity-secondary-color);
+      cursor: pointer;
+    }
   }
   .number {
     color: var(--faded-secondary-color);
