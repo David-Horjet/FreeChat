@@ -1,4 +1,5 @@
 const Users = require("../models/userModel");
+const bcrypt = require("bcrypt");
 
 // GET ALL USERS EXCEPT ONE
 
@@ -56,6 +57,7 @@ const updateUser = async (req, res) => {
           email,
           about
      } = req.body;
+     const user = req.body.user
      const casedEmail = email.toLowerCase();
 
      const emailCheck = await Users.findOne({
@@ -63,20 +65,22 @@ const updateUser = async (req, res) => {
      });
 
      const unameCheck = await Users.findOne({
-          username
+          username: username
      });
 
-     if (emailCheck) {
+     console.log(unameCheck?.username, username, user.username)
+
+     if (emailCheck?.email !== user.email && emailCheck?.email) {
           return res.json({
                status: false,
-               message: "Email has been used"
+               message: "Email has been used by another comrade"
           })
      }
 
-     if (unameCheck) {
+     if (unameCheck?.username !== user.username && unameCheck?.username) {
           return res.json({
                status: false,
-               message: "Username has been taken"
+               message: "Username has been used by another comrade"
           })
      }
      try {
@@ -84,12 +88,15 @@ const updateUser = async (req, res) => {
                $set: req.body
           });
           return res.json({
-               status: false,
+               status: true,
                message: "Profile has been successfully updated",
                user: updatedUser
           })
      } catch (error) {
-          res.status(500).json(error);
+          res.json({
+               status: false,
+               message: "An error occured while setting your profile"
+          });
      }
 };
 
@@ -101,17 +108,18 @@ const updatePassword = async (req, res) => {
      } = req.body
 
      const user = await Users.findById(req.params.id);
-     
+
      const valid = await bcrypt.compare(currentPassword, user.password);
-     
+
      if (!valid) {
-     return res.json({
-          status: false,
-          message: "Password incorrect",
-     })
+          return res.json({
+               status: false,
+               message: "Password incorrect",
+          })
      }
 
-     user.password = helpers.generatePasswordHash(body.password);
+     const salt = await bcrypt.genSalt(10);
+     user.password = await bcrypt.hash(password, salt);
      await user.save();
 
      return res.json({

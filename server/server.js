@@ -26,7 +26,6 @@ const {
 
 PORT = process.env.PORT;
 dbURI = process.env.dbURI;
-DEPLOY = process.env.NODE_ENV;
 // const corsOptions = {
 //      origin: 'https://freechat-henna.vercel.app',
 //      credentials: true
@@ -42,10 +41,6 @@ app.use((req, res, next) => {
      res.locals.user = req.session.user;
      next();
 })
-
-if(DEPLOY === "production") {
-     app.use(express.static("client/build"))
-}
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
@@ -69,10 +64,12 @@ const server = app.listen(PORT, (req, res) => {
 
 const io = socket(server, {
      cors: {
-          //origin: "http://localhost:3000", //development
-          origin: "https://freechat-henna.vercel.app", //deployment
-          credentials: true,
-        },
+          pingTimeout: 6000,
+          "Access-Control-Allow-Origin": "*",
+          // origin: "http://localhost:3000", //development
+          origin: "https://freechatt.netlify.app", //deployment
+          // credentials: true,
+     },
 });
 
 global.onlineUsers = new Map();
