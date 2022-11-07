@@ -73,6 +73,10 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
     setCurrentChat(undefined);
   };
 
+  const handleAudio = () => {
+    alert("Coming in the next update")
+  }
+
   return (
     <>
       <Container className="chatContainer">
@@ -119,7 +123,7 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
                       data-bs-placement="top"
                       title="Audio call"
                     >
-                      <AiFillAudio />
+                      <AiFillAudio onClick={handleAudio} />
                     </a>
                     <a
                       href="#!"
@@ -128,10 +132,10 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
                       data-bs-placement="top"
                       title="Video call"
                     >
-                      <FaVideo />
+                      <FaVideo onClick={handleAudio} />
                     </a>
                     <span>
-                      <BsThreeDotsVertical />
+                      <BsThreeDotsVertical onClick={handleAudio} />
                     </span>
                   </div>
                 </div>

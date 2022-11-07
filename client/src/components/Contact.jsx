@@ -14,7 +14,7 @@ function Contact({
 }) {
   const [loading, setLoading] = useState(true);
 
-  const rowSkelotons = 8
+  const rowSkelotons = 8;
 
   useEffect(() => {
     setTimeout(() => {
@@ -22,24 +22,27 @@ function Contact({
     }, 3000);
   }, []);
 
+  const truncate = (input) =>
+    input?.length > 20 ? `${input.substring(0, 20)}...` : input;
+
   if (loading) {
-    let skelotonRows = []
+    let skelotonRows = [];
     for (let index = 0; index < rowSkelotons; index++) {
       skelotonRows.push(
         <li>
-            <div>
-              <div className="d-flex justify-content-center align-items-center">
-                <div>
-                  <Skeleton width={30} height={30} circle={true} />
-                </div>
-                <div className="px-2">
-                  <Skeleton width={220} height={20} />
-                  <Skeleton width={220} height={20} />
-                </div>
+          <div>
+            <div className="d-flex justify-content-center align-items-center">
+              <div>
+                <Skeleton width={40} height={40} circle={true} />
+              </div>
+              <div className="px-2">
+                <Skeleton width={230} height={30} />
+                <Skeleton width={230} height={30} />
               </div>
             </div>
-          </li>
-      )
+          </div>
+        </li>
+      );
     }
     return (
       <SkeletonTheme color="#5c5b5b" highlightColor="#525252">
@@ -75,9 +78,15 @@ function Contact({
                   </div>
                   <div className="flex-grow-1 d-block">
                     <h6 className="mb-0 mt-1">{contact.username}</h6>
-                    <div className="small text-secondary">
-                      Frances sent a photo.
-                    </div>
+                    {contact.about ? (
+                      <div className="small text-secondary">
+                        {truncate(contact.about)}
+                      </div>
+                    ) : (
+                      <div className="small text-secondary">
+                        This user is yet to describe himself
+                      </div>
+                    )}
                   </div>
                 </div>
               </button>

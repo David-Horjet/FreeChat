@@ -1,0 +1,20 @@
+{
+  "name": "freechat",
+  "version": "1.0.0",
+  "description": "FreeChat is a web chat application built with **MongoDb**, **Express**, **React** and **NodeJs**. I used **ReactJs** for the client side and **NodeJs** for the server-side. The Real-time chatting feature is also developed using [Socket.IO](https://socket.io/).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/David-Horjet/FreeChat.git"
+  },
+  "keywords": ["nodejs", "mongodb", "express", "react", "express", "socketio", "mern", "chatapp"],
+  "author": "David Ojetola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/David-Horjet/FreeChat/issues"
+  },
+  "homepage": "https://github.com/David-Horjet/FreeChat#readme"
+}

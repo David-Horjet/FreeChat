@@ -141,6 +141,7 @@ const FormContainer = styled.div`
       font-size: 25px;
       span {
         color: var(--color);
+      font-size: 25px;
       }
     }
   }
@@ -163,7 +164,7 @@ const FormContainer = styled.div`
       border-radius: 0.4rem;
       color: var(--secondary-color);
       width: 100%;
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
     &:focus {
       border: none;
@@ -190,6 +191,7 @@ const FormContainer = styled.div`
     }
     span {
       color: var(--secondary-color);
+      font-size: 14px;
       a {
         color: #4e0eff;
         font-weight: bold;

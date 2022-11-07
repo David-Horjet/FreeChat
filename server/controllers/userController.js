@@ -12,6 +12,7 @@ const idUsers = async (req, res, next) => {
           }).select([
                "username",
                "image",
+               "about",
                "_id"
           ])
           return res.json(users);

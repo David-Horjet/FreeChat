@@ -44,7 +44,7 @@ function ChatInput({ handleSendMsg }) {
           <input
             type="text"
             className="form-control pe-4"
-            placeholder="Type something Baba"
+            placeholder="Type something Guy"
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
@@ -103,7 +103,9 @@ const Container = styled.div`
     background: var(--primary-color);
     border: none;
     color: var(--secondary-color);
+    padding: 0.475rem 0.75rem;
     outline: none;
+    font-size: 15px;
   }
   &:focus {
     border: none !important;

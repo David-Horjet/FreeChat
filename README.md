@@ -1,44 +1,93 @@
-# FreeChat
+# FreeChat: MERN Stack Chat Application
+## Introduction
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FreeChat is a web chat application built with **MongoDb**, **Express**, **React** and **NodeJs**. I used **ReactJs** for the client side and **NodeJs** for the server-side. The Real-time chatting feature is also developed using [Socket.IO](https://socket.io/).
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+FreeChat provides users with the following features
+<br/>
+* Authentication using **JWT Tokens**
+* A **Free Chatting System** which can be used by anyone using the application to send messages to any user on FreeChat.
+* A **Private Chat** functionality where users can chat with other users privately.
+* Accessibility to private and public profile pages
 
-### `npm start`
+## ScreenShots
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Register Page
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-## Learn More
+![](client/src/assets/images/Screenshot%20(53).png)
+### Login Page
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![](client/src/assets/images/Screenshot%20(54).png)
+### SetImage Page
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+![](client/src/assets/images/Screenshot%20(55).png)
+### Chat Page
 
-### Code Splitting
+![](client/src/assets/images/Screenshot%20(56).png)
+### Each Chat Page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![](client/src/assets/images/Screenshot%20(57).png)
+### Private Profile Page
 
-### Analyzing the Bundle Size
+![](client/src/assets/images/Screenshot%20(58).png)
+### Public Profile Page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![](client/src/assets/images/Screenshot%20(59).png)
+### Settings Page
 
-### Making a Progressive Web App
+![](client/src/assets/images/Screenshot%20(60).png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Dark Mode Chat Page
 
-### Advanced Configuration
+![](client/src/assets/images/Screenshot%20(61).png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+# Installation
 
-### `npm run build` fails to minify
+1. Clone the project into your desired folder by following the command below:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+git clone https://github.com/David-Horjet/FreeChat.git
+```
+2. cd client
+
+Next Install the required modules by inputing the folowing commands below
+
+```
+npm install
+```
+```
+npm start
+```
+
+Take a chill pill, Now that we've set up the client Side, Let's Set the Backend server running,
+
+** Can you split your terminal now? 😎 Let Run the MERN app on a go 🚀
+3. cd server
+
+Next Install the required modules by inputing the folowing commands below
+
+```
+npm install
+```
+```
+npm start
+```
+
+## Local
+
+Finally your MERN App should be running on different server PORTS
+
+* **Client** : [PORT 3000](http://localhost:3000)
+* **Server** : [PORT 5000](http://localhost:5000)
+
+## Live
+
+You can view freechat live on http://abbrefy.xyz/fe84604
+
+## Live Api Documention
+
+You can view freechat live api documentation on http://abbrefy.xyz/624f566

@@ -66,8 +66,8 @@ const io = socket(server, {
      cors: {
           pingTimeout: 6000,
           "Access-Control-Allow-Origin": "*",
-          // origin: "http://localhost:3000", //development
-          origin: "https://freechatt.netlify.app", //deployment
+          origin: "http://localhost:3000", //development
+          // origin: "https://freechatt.netlify.app", //deployment
           // credentials: true,
      },
 });
