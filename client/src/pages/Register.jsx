@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Context } from "../context/Context";
 import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
-import logo from "../assets/images/logo2.png";
+import logo from "../assets/images/logo.png";
 import RoundLoader from "../components/Loaders/RoundLoader";
 
 function Register() {
@@ -37,7 +37,7 @@ function Register() {
       if (handleValidation()) {
         dispatch({ type: "LOGIN_START" });
         const { password, username, email } = values;
-        console.log({ password, username, email });
+        // console.log({ password, username, email });
         const { data } = await axios.post(registerRoute, {
           username,
           email,
@@ -50,12 +50,18 @@ function Register() {
         if (data.status === true) {
           dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
           localStorage.setItem("token", JSON.stringify(data.token));
-          navigate("/setimage");
+          navigate("/");
         }
       }
     } catch (error) {
       dispatch({ type: "LOGIN_FAILURE" });
-      toast.error("Internal server error occured", toastOptions);
+      if(error.response.data.message) {
+        toast.error(error.response.data.message, toastOptions);
+      } else if (error.message) {
+        toast.error(error.response.data.message, toastOptions);
+      } else {
+        toast.error("Internal server error occured", toastOptions);
+      }
     }
   };
 
@@ -92,6 +98,9 @@ function Register() {
             <h1>
               Free<span>Chat</span>
             </h1>
+          </div>
+          <div>
+            <p className="pt-2">Make and chat over 100 friends per day 😎</p>
           </div>
           <div className="username">
             <label htmlFor="username">Username</label>
@@ -164,10 +173,10 @@ const FormContainer = styled.div`
     }
     h1 {
       color: var(--secondary-color);
-      font-size: 25px;
+      font-size: 30px;
       span {
         color: var(--color);
-        font-size: 25px;
+        font-size: 30px;
       }
     }
   }
@@ -179,11 +188,11 @@ const FormContainer = styled.div`
     padding: 2rem 3rem;
     label {
       color: var(--faded-secondary-color);
-      font-size: small;
+      font-size: 16px;
     }
     input {
       background: var(--faded-primary-color);
-      padding: 0.4rem;
+      padding: 0.7rem;
       margin-bottom: 10px;
       border: none;
       outline: none;
@@ -217,7 +226,7 @@ const FormContainer = styled.div`
     }
     span {
       color: var(--secondary-color);
-      font-size: 14px;
+      font-size: 15px;
       a {
         color: #4e0eff;
         font-weight: bold;

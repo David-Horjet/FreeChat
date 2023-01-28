@@ -30,14 +30,14 @@ const register = async (req, res, next) => {
           });
 
           if (emailCheck) {
-               return res.json({
+               return res.status(400).json({
                     status: false,
                     message: "Email has been used by another person"
                })
           }
 
           if (unameCheck) {
-               return res.json({
+               return res.status(400).json({
                     status: false,
                     message: "Username has been used by another person"
                })
@@ -55,12 +55,12 @@ const register = async (req, res, next) => {
           return res.json({
                status: true,
                message: "New User Created",
-               user: user,
-               token: token
+               user,
+               token
           });
      } catch (error) {
           next(error);
-          return res.json({
+          return res.status(500).json({
                status: false,
                message: "Internal Server Error Occured"
           })
@@ -79,34 +79,34 @@ const login = async (req, res, next) => {
           });
 
           if (!user) {
-               return res.json({
+               return res.status(400).json({
                     status: false,
-                    msg: "Username not Found"
+                    message: "Username not Found"
                })
           }
 
           const valid = await bcrypt.compare(password, user.password);
 
           if (!valid) {
-               return res.json({
+               return res.status(400).json({
                     status: false,
-                    msg: "Incorrect Password"
+                    message: "Incorrect Password"
                })
           }
           delete user.password;
 
           const token = generateAccessToken({ username: req.body.username });
 
-          return res.json({
+          return res.status(200).json({
                status: true,
-               msg: "Login Successful",
+               message: "Login Successful",
                user: user,
                token: token
           })
 
      } catch (error) {
           next(error);
-          return res.json({
+          return res.status(500).json({
                status: false,
                message: "Internal Server Error Occured"
           })
