@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { host } from "../utils/APIRoutes";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosPeople, IoIosChatboxes } from "react-icons/io";
-import { BsPersonBadge, BsStarFill } from "react-icons/bs";
+import { BsStarFill } from "react-icons/bs";
+import { RiChatHistoryFill } from "react-icons/ri";
 
 function SideNav({ user }) {
   return (
@@ -16,31 +17,31 @@ function SideNav({ user }) {
           </Link>
         </div>
         <ul>
-          <li className="active">
-            <Link to={"/"}>
+          <li>
+            <NavLink to={"/"}>
               <IoIosChatboxes />{" "}
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={"/"}>
+            <NavLink to={"/"}>
               <IoIosPeople />
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={"/settings"}>
-              <BsPersonBadge />
-            </Link>
+            <NavLink to={"/settings"}>
+              <RiChatHistoryFill />
+            </NavLink>
           </li>
           <li>
-            <Link to={"/"}>
+            <NavLink to={"/"}>
               <BsStarFill />
-            </Link>
+            </NavLink>
           </li>
         </ul>
         <div className="settings">
-          <Link to={"/settings"}>
+          <NavLink to={"/settings"}>
             <IoSettingsOutline />{" "}
-          </Link>
+          </NavLink>
         </div>
       </nav>
     </Container>
@@ -52,12 +53,15 @@ const Container = styled.div`
   width: 6.33333333%;
   padding: 10px;
   background-color: var(--faded-primary-color);
+  flex-shrink: 0;
 
   .header {
     border: 1px solid #fff;
   }
 
   .side-navbar {
+    background: var(--gradient);
+    border-radius: 5px;
     width: 100%;
     height: 100%;
     display: flex;
@@ -88,20 +92,23 @@ const Container = styled.div`
   }
 
   .settings a {
-    color: var(--faded-secondary-color);
+    color: #ffffff;
   }
 
-  .active {
-    background: var(--gradient);
-  }
-
-  .active a {
+  .side-navbar li a.active {
     color: #fff;
   }
 
+  /* .active a {
+    color: #fff;
+  } */
+
   .side-navbar li a {
-    color: var(--secondary-color);
+    color: #eaeaeade;
     line-height: 1.3;
+    &:hover {
+    color: #fff;
+    }
   }
 
   .contacts-info h3 {

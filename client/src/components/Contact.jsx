@@ -10,6 +10,7 @@ function Contact({
   contacts,
   changeCurrentChat,
   currentSelected,
+  searchText,
   isLoading,
 }) {
   const [loading, setLoading] = useState(true);
@@ -52,12 +53,11 @@ function Contact({
   } else {
     return (
       <Fragment>
-        {contacts.map((contact, index) => {
+        {contacts.filter((contact) => contact.username.toLowerCase().includes(searchText)).map((contact, index) => {
           return (
             <li
-              className={`contact ${
-                index === currentSelected ? "selected" : ""
-              }`}
+              className={`contact ${index === currentSelected ? "selected" : ""
+                }`}
               key={index}
               onClick={() => changeCurrentChat(index, contact)}
               data-bs-dismiss="offcanvas"

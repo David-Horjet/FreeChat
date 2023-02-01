@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { BsFillGridFill, BsSearch } from "react-icons/bs";
@@ -10,62 +10,78 @@ function Contacts({ contacts, changeChat, user, isLoading }) {
     setCurrentSelected(index);
     changeChat(contact);
   };
+  const [searchText, setSearchText] = useState("")
+  // const [filtered, setFiltered] = useState(contacts)
+  // const [allContacts, setAllContacts] = useState(contacts)
+  // console.log(filtered);
 
-  return (
-    <>
-      <Container className="contacts-container">
-        <div className="contacts col-sm-12">
-          <nav className="navbar-expand-lg mx-0">
-            <div className="offcanvas offcanvas-start" id="offcanvasNavbar">
-              <div className="card-head">
-                <div className=" d-flex justify-content-between align-items-center">
-                  <h1 className="h5 mb-0">Chats</h1>
-                  <Link
-                    to={`/${user.username}`}
-                    className="dropend position-relative"
-                  >
-                    <BsFillGridFill />
-                  </Link>
-                </div>
+
+  // useEffect(() => {
+  //   filterEntries()
+  // }, [searchText])
+
+  // const filterEntries = () => {
+  //   setFiltered(allContacts.filter((item) => item.firstName.toLowerCase().startsWith(searchText.toLowerCase())))
+  // }
+
+return (
+  <>
+    <Container className="contacts-container">
+      <div className="contacts col-sm-12">
+        <nav className="navbar-expand-lg mx-0">
+          <div className="offcanvas offcanvas-start" id="offcanvasNavbar">
+            <div className="card-head">
+              <div className=" d-flex justify-content-between align-items-center">
+                <h1 className="h5 mb-0">Chats</h1>
+                <Link
+                  to={`/${user.username}`}
+                  className="dropend position-relative"
+                >
+                  <BsFillGridFill />
+                </Link>
               </div>
-              <div className="head pb-3">
-                <form className="position-relative">
-                  <input
-                    className="form-control py-2"
-                    type="search"
-                    placeholder="Search for chats"
-                    aria-label="Search"
-                  />
-                  <button
-                    className="btn bg-transparent text-secondary px-2 py-0 position-absolute top-50 end-0 translate-middle-y"
-                    type="submit"
-                  >
-                    <BsSearch />
-                  </button>
-                </form>
+            </div>
+            <hr />
+            <div className="head py-3">
+              <div className="position-relative">
+                <input
+                  className="form-control py-2"
+                  type="text"
+                  placeholder="Search for friends"
+                  value= {searchText} 
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <button
+                  className="btn bg-transparent text-secondary px-2 py-0 position-absolute top-50 end-0 translate-middle-y"
+                  type="submit"
+                >
+                  <BsSearch />
+                </button>
               </div>
-              <div className="offcanvas-body p-0">
-                <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
-                  <div className="h-100 custom-scrollbar">
-                    <div className="chat-tab-list custom-scrollbar">
-                      <ul className="nav flex-column nav-pills nav-pills-soft">
-                            <Contact
-                              contacts={contacts}
-                              currentSelected={currentSelected}
-                              isLoading={isLoading}
-                              changeCurrentChat={changeCurrentChat}
-                            />
-                      </ul>
-                    </div>
+            </div>
+            <div className="offcanvas-body p-0">
+              <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
+                <div className="h-100 custom-scrollbar">
+                  <div className="chat-tab-list custom-scrollbar">
+                    <ul className="nav flex-column nav-pills nav-pills-soft">
+                      <Contact
+                        contacts={contacts}
+                        searchText={searchText}
+                        currentSelected={currentSelected}
+                        isLoading={isLoading}
+                        changeCurrentChat={changeCurrentChat}
+                      />
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
-          </nav>
-        </div>
-      </Container>
-    </>
-  );
+          </div>
+        </nav>
+      </div>
+    </Container>
+  </>
+);
 }
 
 const Container = styled.div`
@@ -164,6 +180,7 @@ const Container = styled.div`
     padding: 1.2rem;
     h1 {
       color: var(--secondary-color);
+      font-weight: 600;
     }
     .dropend {
       svg {
@@ -172,13 +189,26 @@ const Container = styled.div`
     }
   }
 
+  @media (max-width: 565px) {
+    .card-head {
+    h1 {
+        font-size: 25px;
+    }
+    .dropend {
+      svg {
+        font-size: 25px;
+      }
+    }
+  }
+  }
+
   .head {
     padding: 0rem 1rem;
     .form-control {
       background-color: var(--faded-primary-color);
       border: none;
       color: var(--secondary-color);
-      border-radius: 10px;
+      border-radius: 30px;
       &:focus {
         outline: none;
       }
@@ -205,7 +235,7 @@ const Container = styled.div`
     }
     button {
       padding: 8px;
-      background-color: var(--faded-primary-color);
+      /* background-color: var(--faded-primary-color); */
       border-radius: 10px;
       h6 {
         font-size: 15px;

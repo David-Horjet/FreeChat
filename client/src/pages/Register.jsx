@@ -55,10 +55,10 @@ function Register() {
       }
     } catch (error) {
       dispatch({ type: "LOGIN_FAILURE" });
-      if(error.response.data.message) {
-        toast.error(error.response.data.message, toastOptions);
+      if(error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message, toastOptions);
       } else if (error.message) {
-        toast.error(error.response.data.message, toastOptions);
+        toast.error(error?.response?.data?.message, toastOptions);
       } else {
         toast.error("Internal server error occured", toastOptions);
       }
@@ -95,12 +95,12 @@ function Register() {
         <form onSubmit={(event) => handleSubmit(event)}>
           <div className="logo">
             <img src={logo} alt="logo" />
-            <h1>
+            <h1 className="mb-0">
               Free<span>Chat</span>
             </h1>
           </div>
-          <div>
-            <p className="pt-2">Make and chat over 100 friends per day 😎</p>
+          <div className="descrip">
+            <p className="pt-2 text-center">Make and chat over 100 friends per day 😎</p>
           </div>
           <div className="username">
             <label htmlFor="username">Username</label>
@@ -164,22 +164,36 @@ const FormContainer = styled.div`
   background-color: var(--faded-primary-color);
   justify-content: center;
   overflow-y: auto;
+
+  @media (max-width: 992px) {
+    form {
+      height: 100%;
+      width: 100%;
+      padding: 2rem 1.5rem !important;
+    }
+  }
+
   .logo {
     display: flex;
     align-items: center;
     justify-content: center;
     img {
-      width: 50px;
+      width: 35px;
     }
     h1 {
       color: var(--secondary-color);
-      font-size: 30px;
+      font-size: 25px;
       span {
         color: var(--color);
-        font-size: 30px;
+        font-size: 25px;
       }
     }
   }
+
+  .descrip p {
+    color: var(--faded-secondary-color);
+  }
+
   form {
     display: flex;
     flex-direction: column;
@@ -188,12 +202,13 @@ const FormContainer = styled.div`
     padding: 2rem 3rem;
     label {
       color: var(--faded-secondary-color);
+      margin-bottom: 5px;
       font-size: 16px;
     }
     input {
       background: var(--faded-primary-color);
       padding: 0.7rem;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       border: none;
       outline: none;
       border-radius: 0.4rem;

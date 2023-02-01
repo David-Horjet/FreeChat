@@ -147,6 +147,8 @@ hr:not([size]) {
   width: 300px !important;
   margin-top: 5px;
   border-radius: 5px;
+  font-size: 12px !important;
+  margin-left: auto !important;
 }
 .Toastify__toast--error {
   background: #E74C3C !important;
@@ -4347,7 +4349,7 @@ fieldset:disabled .btn {
   min-width: 0;
   word-wrap: break-word;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: none;
   border-radius: 0.25rem;
 }
 .card > hr {
@@ -5447,7 +5449,10 @@ fieldset:disabled .btn {
     z-index: 99;
     right: 0;
     left: 0;
-    border: 1px solid var(--faded-secondary-color);
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    -webkit-box-shadow: 3.346px 3.716px 22.5px rgb(0 0 0 / 7%);
+    box-shadow: 3.346px 3.716px 22.5px rgb(0 0 0 / 7%);
   }
   .sideNav .side-navbar {
     flex-direction: row !important;
@@ -5464,8 +5469,7 @@ fieldset:disabled .btn {
   .contacts-container {
     flex: 0 0 auto !important;
     width: 33.33333333% !important;
-    margin: 70px 0 0 0;
-    border: 1px solid var(--faded-secondary-color);
+    margin: 60px 0 0 0;
     height: 89vh;
   }
   .welcome-chat {
@@ -5549,6 +5553,10 @@ fieldset:disabled .btn {
     width: 100% !important;
     margin: 0;
     height: 95vh;
+    overflow: hidden !important;
+  }
+  .contacts-container .contacts {
+    overflow: hidden !important;
   }
   .contacts-container .offcanvas-body ul li {
     width: 100% !important;
