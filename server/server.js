@@ -66,9 +66,8 @@ const io = socket(server, {
      cors: {
           pingTimeout: 6000,
           "Access-Control-Allow-Origin": "*",
-          // origin: "http://localhost:3000", //development
-          origin: "https://freechatt.vercel.app", //deployment
-          // credentials: true,
+          origin: "*", //development
+          // origin: "https://freechatt.vercel.app", //deployment
      },
 });
 
