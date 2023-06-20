@@ -14,6 +14,7 @@ function Contact({
   isLoading,
 }) {
   const [loading, setLoading] = useState(true);
+  console.log(contacts)
 
   const rowSkelotons = 8;
 
