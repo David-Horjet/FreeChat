@@ -7,7 +7,7 @@ const idUsers = async (req, res, next) => {
      try {
           const users = await Users.find({
                _id: {
-                    $ne: req.params.id
+                    $ne: req.user._id
                }
           }).select([
                "username",
@@ -33,7 +33,7 @@ const idUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
      try {
-          const username = req.params.username;
+          const username = req.user.username;
           if (username) {
                const user = await Users.findOne({
                     username: username
@@ -53,7 +53,7 @@ const getUser = async (req, res, next) => {
           } else {
                return res.status(400).json({
                     status: false,
-                    msg: "",
+                    msg: "username is required",
                });
           }
 

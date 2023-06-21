@@ -43,8 +43,7 @@ function Login() {
           isFetching(false);
         }
         if (res.data.status === true) {
-          dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
-          localStorage.setItem("token", JSON.stringify(res.data.token));
+          dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user, token: res.data.token });
           toast.success(res.data.message, toastOptions);
           setTimeout(() => {
             navigate("/");

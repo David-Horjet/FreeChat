@@ -12,30 +12,36 @@ import PageNotFound from "./pages/PageNotFound";
 import ueLocalStorage from "use-local-storage";
 
 function App() {
-  const { user } = useContext(Context);
-  const [theme, setTheme] = ueLocalStorage("theme" ? "dark" : "light");
+  const { token } = useContext(Context);
+  const [theme, setTheme] = ueLocalStorage("theme" ? "dark" : "dark");
 
   const switchTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
+    const newTheme = theme === "theme" ? "dark" : "dark";
     setTheme(newTheme);
   };
 
   return (
     <>
-      <div className="app" data-theme={theme}>
+      <div className="app" data-theme={"dark"}>
         <BrowserRouter>
           <Routes>
-            <Route path="/register" element={user ? <Chat /> : <Register />} />
-            <Route path="/setimage" element={user ? <SetImage /> : <Login />} />
-            <Route path="/login" element={user ? <Chat /> : <Login />} />
+            <Route path="/register" element={token ? <Chat /> : <Register />} />
+            <Route
+              path="/setimage"
+              element={token ? <SetImage /> : <Login />}
+            />
+            <Route path="/login" element={token ? <Chat /> : <Login />} />
             <Route
               path="/settings"
               element={
-                user ? <Settings switchTheme={switchTheme} /> : <Login />
+                token ? <Settings switchTheme={switchTheme} /> : <Login />
               }
             />
-            <Route path="/:username" element={user ? <Profile /> : <Login />} />
-            <Route path="/" element={user ? <Chat /> : <Login />} />
+            <Route
+              path="/:username"
+              element={token ? <Profile /> : <Login />}
+            />
+            <Route path="/" element={token ? <Chat /> : <Login />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>

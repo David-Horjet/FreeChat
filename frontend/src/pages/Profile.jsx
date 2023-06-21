@@ -1,16 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SideNav from "../components/SideNav";
 import ProfileContainer from "../components/ProfileContainer";
 import { Context } from "../context/Context";
 import { userRoute } from "../utils/APIRoutes";
 import axios from "axios";
+import { authAxios } from "../utils/Axios";
 
 function Profile() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const username = location.pathname.split("/")[1];
   const { user } = useContext(Context);
 
   const [profile, setProfile] = useState("");
@@ -21,7 +20,7 @@ function Profile() {
 
   useEffect(() => {
     async function fetchUserData() {
-      const res = await axios.get(`${userRoute}/${username}`);
+      const res = await authAxios.get(userRoute);
       if(res.data.status === false) {
         navigate("*")
       } 
@@ -30,7 +29,7 @@ function Profile() {
       } 
     }
     fetchUserData();
-  }, [username, navigate]);
+  }, [navigate]);
 
   return (
     <>

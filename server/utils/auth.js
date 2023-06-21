@@ -11,7 +11,7 @@ const validatePassword = (password, hash) => {
 
 const generateAccessToken = (username) => {
      return jwt.sign(username, process.env.TOKEN_SECRET, {
-          expiresIn: '300s'
+          expiresIn: '30d'
      });
 }
 

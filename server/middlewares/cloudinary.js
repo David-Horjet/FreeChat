@@ -42,4 +42,4 @@ function cloudinaryStatsUploader(imagePath, callback) {
 // }
 
 
-module.exports = { cloudinaryCatUploader, cloudinaryProdUploader, cloudinaryUserUploader };
+module.exports = { cloudinaryStatsUploader, cloudinaryUserUploader };

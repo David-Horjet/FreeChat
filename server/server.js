@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const socket = require("socket.io");
 require("dotenv").config();
+const cloudinaryConfig = require('./config/cloudinary');
 
 
 const {
@@ -41,6 +42,8 @@ app.use((req, res, next) => {
      res.locals.user = req.session.user;
      next();
 })
+
+cloudinaryConfig()
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);

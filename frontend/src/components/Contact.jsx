@@ -54,7 +54,7 @@ function Contact({
   } else {
     return (
       <Fragment>
-        {contacts.filter((contact) => contact.username.toLowerCase().includes(searchText)).map((contact, index) => {
+        {contacts?.users?.filter((contact) => contact.username.toLowerCase().includes(searchText)).map((contact, index) => {
           return (
             <li
               className={`contact ${index === currentSelected ? "selected" : ""

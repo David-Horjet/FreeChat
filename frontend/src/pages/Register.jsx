@@ -48,9 +48,8 @@ function Register() {
           isFetching(false);
         }
         if (data.status === true) {
-          dispatch({ type: "LOGIN_SUCCESS", payload: data.user });
-          localStorage.setItem("token", JSON.stringify(data.token));
-          navigate("/");
+          dispatch({ type: "LOGIN_SUCCESS", payload: data.user, token: data.token });
+          navigate("/setimage");
         }
       }
     } catch (error) {

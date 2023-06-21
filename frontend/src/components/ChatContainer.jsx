@@ -45,6 +45,7 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
       from: user._id,
       message: msg,
     });
+        console.log(messages);
 
     const msgs = [...messages];
     msgs.push({ fromSelf: true, message: msg });
@@ -144,7 +145,7 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
 
                 {/* <!-- Chat conversation START --> */}
                 <div className="chat-conversation-content custom-scrollbar">
-                  {messages.map((message) => (
+                  {messages?.messages?.map((message) => (
                     <div ref={scrollRef} key={uuid4()}>
                       {/* <!-- Chat message --> */}
                       <div

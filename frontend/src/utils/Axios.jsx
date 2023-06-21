@@ -1,13 +1,12 @@
 import axios from "axios";
-import {host} from "./APIRoutes"
+import { host } from "./APIRoutes";
 
-const accessToken = localStorage.getItem("token");
+const token = JSON.parse(localStorage.getItem("token"))
 
-const authAxios = axios.create({
-     baseURL: host,
-     headers: {
-          authorization: `Bearer ${accessToken}`
-     }
-})
-
-export default authAxios;
+export const authAxios = axios.create({
+  baseURL: host,
+  headers: {
+    authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  },
+});

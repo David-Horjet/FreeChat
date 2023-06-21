@@ -32,7 +32,7 @@ return (
           <div className="offcanvas offcanvas-start" id="offcanvasNavbar">
             <div className="card-head">
               <div className=" d-flex justify-content-between align-items-center">
-                <h1 className="h5 mb-0">Chats</h1>
+                <span className="mb-0">Chats</span>
                 <Link
                   to={`/${user.username}`}
                   className="dropend position-relative"
@@ -178,9 +178,9 @@ const Container = styled.div`
 
   .card-head {
     padding: 1.2rem;
-    h1 {
+    span {
       color: var(--secondary-color);
-      font-weight: 600;
+      font-size: 15px;
     }
     .dropend {
       svg {
@@ -191,12 +191,9 @@ const Container = styled.div`
 
   @media (max-width: 565px) {
     .card-head {
-    h1 {
-        font-size: 25px;
-    }
     .dropend {
       svg {
-        font-size: 25px;
+        font-size: 15px;
       }
     }
   }
@@ -209,6 +206,7 @@ const Container = styled.div`
       border: none;
       color: var(--secondary-color);
       border-radius: 30px;
+      font-size: 15px;
       &:focus {
         outline: none;
       }
@@ -235,7 +233,6 @@ const Container = styled.div`
     }
     button {
       padding: 8px;
-      /* background-color: var(--faded-primary-color); */
       border-radius: 10px;
       h6 {
         font-size: 15px;

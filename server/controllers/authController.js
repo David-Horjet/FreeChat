@@ -1,12 +1,7 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
-const {
-     upload
-} = require('../middlewares/upload');
 const { generateAccessToken } = require("../utils/auth");
-
-const storage = upload.single('image');
+const { cloudinaryUserUploader } = require("../middlewares/cloudinary")
 
 const register = async (req, res, next) => {
      try {
@@ -114,36 +109,51 @@ const login = async (req, res, next) => {
 }
 
 const setImage = async (req, res, next) => {
-     storage(req, res, async (error) => {
+     const { about } = req.body;
+     const imageFile = req.file
+     console.log(req.body)
+     console.log(imageFile)
+     if (!imageFile || !about) {
+          res.status(400).json({
+               status: false,
+               msg: "All fields are required"
+          })
+     } else {
+          try {
+               cloudinaryUserUploader(imageFile?.path, async (error, result) => {
+                    if (error) {
+                         console.error(error);
+                         return res.status(400).json({
+                              status: false,
+                              msg: "You've got some errors",
+                              error: error.message
+                         });
+                    } else {
+                         const userId = req.user._id;
+                         console.log(userId);
+                         const image = result.secure_url;
+                         const userData = await Users.findByIdAndUpdate(userId, {
+                              new: true,
+                              image,
+                              about
+                         });
+                         return res.json({
+                              status: true,
+                              msg: "Profile Image Successfully Set",
+                              user: userData
+                         });
+                    }
 
-          if (error) {
-               return res.json({
-                    status: "false",
-                    msg: error.message
+               })
+          } catch (error) {
+               next(error);
+               console.log(error)
+               return res.status(500).json({
+                    status: false,
+                    message: "Internal Server Error Occured"
                })
           }
-
-          const body = req.body;
-
-          if (req.file) {
-               body.image = req.file.path;
-          }
-
-          const userId = req.params.id;
-          const image = body.image;
-          const about = body.about;
-          const userData = await Users.findByIdAndUpdate(userId, {
-               new: true,
-               image,
-               about
-          });
-
-          return res.json({
-               status: true,
-               msg: "Profile Image Successfully Set",
-               data: userData
-          });
-     })
+     }
 }
 
 module.exports = {

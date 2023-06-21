@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { setImageRoute } from "../utils/APIRoutes";
 import { BsPersonCircle } from "react-icons/bs";
 import { DiSenchatouch } from "react-icons/di";
 import { Context } from "../context/Context";
 import RoundLoader from "../components/Loaders/RoundLoader";
+import { handleErrors } from "../utils/errorHandler";
+import { authAxios } from "../utils/Axios";
 
 function SetImage() {
-  const { user, dispatch, isFetching } = useContext(Context);
-  const navigate = useNavigate();
+  const { dispatch } = useContext(Context);
   const [image, setImage] = useState({ preview: "", data: "" });
   const inputRef = useRef(null);
   const [about, setAbout] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // console.log(user);
 
   const toastOptions = {
     position: "top-right",
@@ -33,27 +35,26 @@ function SetImage() {
     e.preventDefault();
     try {
       if (handleValidation()) {
-        dispatch({ type: "LOGIN_START" });
+        setLoading(true);
         let formData = new FormData();
         if (image.data) {
           formData.append("image", image.data);
           formData.append("about", about);
-          console.log(formData);
           const config = {
             headers: {
               "content-type": "multipart/form-data",
             },
           };
-          const response = await axios.post(
-            `${setImageRoute}/${user._id}`,
+          const response = await authAxios.post(
+            setImageRoute,
             formData,
             config
           );
           if (response.data.status === true) {
-            toast.success(`${response.data.msg}, Sorry you will need to login again to save changes`, toastOptions);
-            dispatch({ type: "LOGIN_SUCCESS", payload: response.data.user });
+            toast.success(response.data.msg, toastOptions);
+            setLoading;(false);
             setTimeout(() => {
-              navigate("/login");
+              window.location.pathname = "/";
             }, 3000);
           }
           if (response.data.status === false) {
@@ -61,25 +62,25 @@ function SetImage() {
               "An error occured while setting up your profile pic",
               toastOptions
             );
-            isFetching(false);
+            setLoading(false);
           }
         } else {
           toast.error("Please choose a profile pic", toastOptions);
-          isFetching(false);
+          setLoading(false);
         }
       }
     } catch (error) {
-      dispatch({ type: "LOGIN_FAILURE" });
-      toast.error("Internal server error occured", toastOptions);
-      console.log(error)     
+      setLoading(false);
+      handleErrors(error);
+      console.log(error);
     }
   };
 
   const handleValidation = () => {
-    if (image === "") {
+    if (about === "") {
       toast.error("Please you have to tell us about yourself", toastOptions);
       return false;
-    } else if (about === "") {
+    } else if (image === "") {
       toast.error("Please choose a profile pic", toastOptions);
       return false;
     } else {
@@ -137,6 +138,7 @@ function SetImage() {
             type="file"
             name="image"
             onChange={handleFileChange}
+            accept="image/*"
           />
           <textarea
             maxLength={200}
@@ -146,8 +148,8 @@ function SetImage() {
             placeholder="Tell the world about yourself"
           />
           <span className="limit">Character Limit: 200</span>
-          {!isFetching && <button type="submit">Submit</button>}
-          {isFetching && (
+          {!loading && <button type="submit">Submit</button>}
+          {loading && (
             <button disabled type="submit">
               <RoundLoader />
             </button>
@@ -168,6 +170,13 @@ const FormContainer = styled.div`
   align-items: center;
   background-color: var(--faded-primary-color);
   justify-content: center;
+  @media (max-width: 992px) {
+    form {
+      height: 100%;
+      width: 100%;
+      padding: 2rem 1.5rem !important;
+    }
+  }
   .logo {
     display: flex;
     align-items: center;

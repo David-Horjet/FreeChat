@@ -4,12 +4,11 @@ import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 import { usersRoute, host } from "../utils/APIRoutes";
-import axios from "axios";
 import { io } from "socket.io-client";
-// import { useNavigate } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import { Context } from "../context/Context";
-// import authAxios from "../utils/Axios"
+import { authAxios } from "../utils/Axios";
+import { handleErrors } from "../utils/errorHandler";
 
 function Chat() {
   const socket = useRef();
@@ -17,43 +16,11 @@ function Chat() {
   const { user } = useContext(Context);
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [user, setCurrentUser] = useState(() => {
-  //   const saved = localStorage.getItem("User");
-  //   const initialValue = JSON.parse(saved);
-  //   return initialValue || "";
-  // });
   const [currentChat, setCurrentChat] = useState(undefined);
 
   useEffect(() => {
     document.title = "Chat - FreeChat";
   });
-
-  // useEffect(() => {
-  //   async function getUser() {
-
-  //     if (!localStorage.getItem("User")) {
-  //       navigate("/login");
-  //     } else {
-  //       setCurrentUser(JSON.parse(localStorage.getItem("User")));
-  //     }
-  //   }
-  //   getUser()
-  // }, [navigate]);
-
-  // useEffect(() => {
-  //   if(user) {
-  //     async function authUser() {
-  //       const accessToken = localStorage.getItem("token");
-  //       const data = await axios.post(`${userRoute}/${user._id}`, {
-  //         headers: {
-  //           "Authorization" : `Bearer ${accessToken}`
-  //         }
-  //       });
-  //       console.log(data)
-  //     }
-  //     authUser()
-  //   }
-  // }, [user])
 
   useEffect(() => {
     if (user) {
@@ -64,13 +31,20 @@ function Chat() {
 
   useEffect(() => {
     async function allUsers() {
-      if (user) {
-        setIsLoading(true);
-        const data = await axios.get(`${usersRoute}/${user._id}`);
-        if (data.data) {
-          setIsLoading(false);
+      try {
+        if (user) {
+          setIsLoading(true);
+          const res = await authAxios.get(usersRoute);
+          if (res.data.status === false) {
+            setIsLoading(false);
+          } else {
+            setContacts(res.data);
+          }
         }
-        setContacts(data.data);
+      } catch (error) {
+        setIsLoading(false);
+        handleErrors(error);
+        console.log(error);
       }
     }
     allUsers();
@@ -114,8 +88,8 @@ function Chat() {
 const Container = styled.div`
   * {
     overflow-x: hidden;
-  }l
-  .chat {
+  }
+  l .chat {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -143,20 +117,25 @@ const Container = styled.div`
     position: relative;
   }
 
-  .chat-container
-    .row
-    .contact-container
-    .card
-    .chat-conversation-content::-webkit-scrollbar {
-    width: 5px;
+  /* Track */
+  .chat-conversation-content::-webkit-scrollbar-track {
+    background-color: #1f1f1f;
   }
 
-  .chat-container
-    .row
-    .contact-container
-    .card
-    .chat-conversation-content::-webkit-scrollbar-thumb {
-    background-color: rgb(65, 65, 65);
+  /* Handle */
+  .chat-conversation-content::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  .chat-conversation-content::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+  }
+
+  /* Corner */
+  .chat-conversation-content::-webkit-scrollbar-corner {
+    background-color: #1f1f1f;
   }
 `;
 

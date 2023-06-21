@@ -48,7 +48,7 @@ const getAllMessages = async (req, res, next) => {
           });
           res.status(200).json({
                status: true,
-               projectMessages
+               messages: projectMessages
           });
      } catch (ex) {
           next(ex);
