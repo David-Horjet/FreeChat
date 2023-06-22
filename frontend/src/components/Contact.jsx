@@ -25,7 +25,7 @@ function Contact({
   // }, []);
 
   const truncate = (input) =>
-    input?.length > 20 ? `${input.substring(0, 20)}...` : input;
+    input?.length > 30 ? `${input.substring(0, 30)}...` : input;
 
   if (isLoading) {
     let skelotonRows = [];
@@ -78,7 +78,7 @@ function Contact({
                     <div className="flex-shrink-0 avatar avatar-story me-2 status-online">
                       <img
                         className="avatar-img rounded-circle"
-                        src={`${host}/${contact.image}`}
+                        src={contact.image}
                         alt="user-pic"
                       />
                     </div>

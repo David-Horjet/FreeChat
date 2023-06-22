@@ -1,18 +1,36 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 // import { host } from "../utils/APIRoutes";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import SettingsContainer from "../components/SettingsContainer";
-import { Context } from "../context/Context";
+import { authAxios } from "../utils/Axios";
+import { userRoute } from "../utils/APIRoutes";
 
 function Settings({switchTheme}) {
-  const {user} = useContext(Context);
+
+  const [profile, setProfile] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.title = "Settings - FreeChat";
   });
+
+   useEffect(() => {
+     async function fetchUserData() {
+       setLoading(true);
+       const res = await authAxios.get(userRoute);
+       if (res.data.status === false) {
+         setLoading(false);
+       }
+       if (res.data.status === true) {
+         setLoading(false);
+         setProfile(res.data.user);
+       }
+     }
+     fetchUserData();
+   }, []);
 
   return (
     <>
@@ -20,13 +38,8 @@ function Settings({switchTheme}) {
         <div className="chat wrapper">
           <div className="chat-container">
             <div className="row">
-              <SideNav
-                user={user}
-              />
-              <SettingsContainer
-                switchTheme={switchTheme}
-                user={user}
-              />
+              <SideNav user={profile} loading={loading} />
+              <SettingsContainer switchTheme={switchTheme} user={profile} />
             </div>
           </div>
         </div>
