@@ -129,10 +129,12 @@ const setImage = async (req, res, next) => {
                               error: error.message
                          });
                     } else {
-                         const userId = req.user._id;
-                         console.log(userId);
+                         const username = req.user.username;
+                         const user = await Users.findOne({
+                              username: username
+                         })
                          const image = result.secure_url;
-                         const userData = await Users.findByIdAndUpdate(userId, {
+                         const userData = await Users.findByIdAndUpdate(user._id, {
                               new: true,
                               image,
                               about

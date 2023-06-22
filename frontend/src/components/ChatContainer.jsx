@@ -28,7 +28,7 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
           from: user._id,
           to: currentChat._id,
         });
-        setMessages(response.data);
+        setMessages(response.data.messages);
       }
     }
     getMsg();
@@ -45,8 +45,8 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
       from: user._id,
       message: msg,
     });
-        console.log(messages);
 
+    // console.log(messages)
     const msgs = [...messages];
     msgs.push({ fromSelf: true, message: msg });
     setMessages(msgs);
@@ -68,7 +68,7 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
     scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
 
-  console.log(messages);
+  // console.log(messages);
 
   const handleBack = () => {
     setCurrentChat(undefined);
@@ -145,7 +145,7 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
 
                 {/* <!-- Chat conversation START --> */}
                 <div className="chat-conversation-content custom-scrollbar">
-                  {messages?.messages?.map((message) => (
+                  {messages?.map((message) => (
                     <div ref={scrollRef} key={uuid4()}>
                       {/* <!-- Chat message --> */}
                       <div

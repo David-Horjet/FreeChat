@@ -38,6 +38,7 @@ function Chat() {
           if (res.data.status === false) {
             setIsLoading(false);
           } else {
+            setIsLoading(false);
             setContacts(res.data);
           }
         }

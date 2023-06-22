@@ -85,11 +85,11 @@
 }
 
 [data-theme='dark'] {
-  --primary-color: #18191A !important;
+  --primary-color: #232428 !important;
   --secondary-color: #f3f1f1 !important;
   --lowOpacity-primary-color: #14191e85 !important;
   --lowOpacity-secondary-color: #ffffff51 !important;
-  --faded-primary-color: #242526 !important;
+  --faded-primary-color: #2b2d31 !important;
   --faded-secondary-color: #adadad !important;
   --gray: #8696A0;
  }

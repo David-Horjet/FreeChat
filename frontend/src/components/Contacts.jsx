@@ -41,8 +41,7 @@ return (
                 </Link>
               </div>
             </div>
-            <hr />
-            <div className="head py-3">
+            {/* <div className="head py-3">
               <div className="position-relative">
                 <input
                   className="form-control py-2"
@@ -58,7 +57,7 @@ return (
                   <BsSearch />
                 </button>
               </div>
-            </div>
+            </div> */}
             <div className="offcanvas-body p-0">
               <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
                 <div className="h-100 custom-scrollbar">
@@ -87,7 +86,6 @@ return (
 const Container = styled.div`
   flex: 0 0 auto;
   width: 25%;
-  background-color: var(--primary-color);
   .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
   }
@@ -178,6 +176,7 @@ const Container = styled.div`
 
   .card-head {
     padding: 1.2rem;
+    background-color: var(--primary-color);
     span {
       color: var(--secondary-color);
       font-size: 15px;
@@ -191,12 +190,12 @@ const Container = styled.div`
 
   @media (max-width: 565px) {
     .card-head {
-    .dropend {
-      svg {
-        font-size: 15px;
+      .dropend {
+        svg {
+          font-size: 15px;
+        }
       }
     }
-  }
   }
 
   .head {
@@ -214,8 +213,8 @@ const Container = styled.div`
   }
 
   .offcanvas-body {
-    height: 80vh;
-
+    height: 90vh;
+    background-color: var(--faded-primary-color);
     .navbar {
       height: 100%;
       padding: 0;
@@ -229,7 +228,7 @@ const Container = styled.div`
       padding: 5px 10px;
     }
     ul .selected button {
-      background: var(--gradient);
+      background-color: var(--faded-primary-color);
     }
     button {
       padding: 8px;

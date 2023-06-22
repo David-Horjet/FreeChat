@@ -5,7 +5,6 @@ import SideNav from "../components/SideNav";
 import ProfileContainer from "../components/ProfileContainer";
 import { Context } from "../context/Context";
 import { userRoute } from "../utils/APIRoutes";
-import axios from "axios";
 import { authAxios } from "../utils/Axios";
 
 function Profile() {
@@ -13,6 +12,7 @@ function Profile() {
   const { user } = useContext(Context);
 
   const [profile, setProfile] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.title = "Profile - FreeChat";
@@ -20,17 +20,19 @@ function Profile() {
 
   useEffect(() => {
     async function fetchUserData() {
+      setLoading(true)
       const res = await authAxios.get(userRoute);
       if(res.data.status === false) {
+        setLoading(false)
         navigate("*")
       } 
       if(res.data.status === true) {
+        setLoading(false)
         setProfile(res.data.user)
       } 
     }
     fetchUserData();
   }, [navigate]);
-
   return (
     <>
       <Container>
@@ -38,7 +40,7 @@ function Profile() {
           <div className="chat-container">
             <div className="row">
               <SideNav user={user} />
-              <ProfileContainer profile={profile} user={user} />
+              <ProfileContainer profile={profile} loading={loading} user={user} />
             </div>
           </div>
         </div>

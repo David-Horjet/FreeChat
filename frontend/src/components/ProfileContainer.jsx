@@ -6,9 +6,9 @@ import { BiCopy } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import { host } from "../utils/APIRoutes";
 import { FaPencilAlt } from "react-icons/fa";
+import { SkeletonCircle, SkeletonPlane } from "./Loaders/SkeletonLoader";
 
-function ProfileContainer({ profile, user }) {
-  const image = `${host}/${profile.image}`;
+function ProfileContainer({ profile, user, loading }) {
   const [publicProfile, setPublicProfile] = useState(true);
 
   const toastOptions = {
@@ -39,8 +39,16 @@ function ProfileContainer({ profile, user }) {
   };
 
   const handleAddFriend = () => {
-    alert("Coming in the next update")
-  }
+    alert("Coming in the next update");
+  };
+
+  const avatarStyling = {
+    marginTop: "-50px",
+    width: "120px",
+    height: "120px",
+    overflow: "hidden",
+    position: "relative",
+  };
 
   return (
     <>
@@ -50,54 +58,95 @@ function ProfileContainer({ profile, user }) {
             <div className="w-100 card">
               <div className="image d-flex flex-column justify-content-center align-items-center">
                 <div className="cover-bg"></div>
-                <div className="avatar">
-                  <img src={image} className="w-100 h-100" alt="profile-pic" />
-                  {!publicProfile && (
-                    <div className="edit">
-                      <Link to="/setimage">
-                        <FaPencilAlt /> Edit
-                      </Link>
-                    </div>
+                {loading ? (
+                  <SkeletonCircle
+                    customStyle={avatarStyling}
+                    width={110}
+                    height={110}
+                  />
+                ) : (
+                  <div className="avatar">
+                    <img
+                      src={profile.image}
+                      className="w-100 h-100"
+                      alt="profile-pic"
+                    />
+                    {!publicProfile && (
+                      <div className="edit">
+                        <Link to="/setimage">
+                          <FaPencilAlt /> Edit
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {loading ? (
+                  <SkeletonPlane width={100} height={10} />
+                ) : (
+                  <h2 className="name mt-3">{profile.username}</h2>
+                )}
+
+                <div className="about d-flex flex-row justify-content-center align-items-center mt-3">
+                  {loading ? (
+                    <SkeletonPlane width={100} height={10} />
+                  ) : (
+                    <p>{profile.about}</p>
                   )}
                 </div>
-                <h2 className="name mt-3">{profile.username}</h2>
-                <div className="about d-flex flex-row justify-content-center align-items-center mt-3">
-                  <p>{profile.about}</p>
-                </div>
-                <div className="d-flex flex-row justify-content-center align-items-center gap-2">
-                  <span className="uname">@{profile.username}</span>{" "}
-                  <span title="Copy link to clipboard">
-                    <BiCopy onClick={() => copyUsernameLink()} />
-                  </span>
-                </div>
+                {loading ? (
+                  <SkeletonPlane width={100} height={10} />
+                ) : (
+                  <div className="d-flex flex-row justify-content-center align-items-center gap-2">
+                    <span className="uname">@{profile.username}</span>{" "}
+                    <span title="Copy link to clipboard">
+                      <BiCopy onClick={() => copyUsernameLink()} />
+                    </span>
+                  </div>
+                )}
                 <div className="d-flex flex-row justify-content-center align-items-center my-3">
-                  <span className="number">
-                    1069 <span className="follow">Favourites</span>
-                  </span>
+                  {loading ? (
+                    <SkeletonPlane width={60} height={10} />
+                  ) : (
+                    <span className="number">
+                      1069 <span className="follow">Favourites</span>
+                    </span>
+                  )}
                 </div>
                 {publicProfile && (
                   <div className=" d-flex mt-2">
-                    <button onClick={handleAddFriend}>
-                      <Link to="">Add Friend</Link>
-                    </button>
+                    {loading ? (
+                      <SkeletonPlane width={50} height={20} />
+                    ) : (
+                      <button onClick={handleAddFriend}>
+                        <Link to="">Add Friend</Link>
+                      </button>
+                    )}
                   </div>
                 )}
                 {!publicProfile && (
                   <div className=" d-flex mt-2">
-                    <button>
-                      <Link to={"/settings"}>Edit Profile</Link>
-                    </button>
+                    {loading ? (
+                      <SkeletonPlane width={50} height={20} />
+                    ) : (
+                      <button>
+                        <Link to={"/settings"}>Edit Profile</Link>
+                      </button>
+                    )}
                   </div>
                 )}
-                <div className=" px-2 rounded my-3 date ">
-                  <span className="join">
-                    Joined{" "}
-                    {new Date(profile.createdAt).toLocaleString("default", {
-                      month: "short",
-                    })}
-                    , {new Date(profile.createdAt).getFullYear()}
-                  </span>
-                </div>
+                {loading ? (
+                  <SkeletonPlane width={80} height={10} />
+                ) : (
+                  <div className=" px-2 rounded my-3 date ">
+                    <span className="join">
+                      Joined{" "}
+                      {new Date(profile.createdAt).toLocaleString("default", {
+                        month: "short",
+                      })}
+                      , {new Date(profile.createdAt).getFullYear()}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -113,7 +162,7 @@ const Container = styled.div`
   width: 93.66666667%;
 
   .body-card {
-    background-color: var(--primary-color);
+    background-color: var(--faded-primary-color);
     overflow: auto;
     height: 100vh;
     width: 100vw;
@@ -127,7 +176,7 @@ const Container = styled.div`
     }
   }
   .card {
-    background: var(--faded-primary-color);
+    background: var(--primary-color);
     border: none;
     .cover-bg {
       width: 100%;
@@ -186,6 +235,7 @@ const Container = styled.div`
     border: none;
     padding: 10px 20px;
     border-radius: 10px;
+    font-size: 12px;
     a {
       color: #fff;
     }
@@ -193,6 +243,7 @@ const Container = styled.div`
   .date {
     span {
       color: var(--lowOpacity-secondary-color);
+      font-size: 12px;
     }
   }
 `;

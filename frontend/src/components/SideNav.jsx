@@ -1,40 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, NavLink } from "react-router-dom";
-import { host } from "../utils/APIRoutes";
+import { userRoute } from "../utils/APIRoutes";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosPeople, IoIosChatboxes } from "react-icons/io";
 import { BsStarFill } from "react-icons/bs";
 import { RiChatHistoryFill } from "react-icons/ri";
+import { authAxios } from "../utils/Axios";
+import { SkeletonCircle } from "./Loaders/SkeletonLoader";
 
-function SideNav({ user }) {
+function SideNav() {
+  const [profile, setProfile] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      setLoading(true);
+      const res = await authAxios.get(userRoute);
+      if (res.data.status === false) {
+        setLoading(false);
+      }
+      if (res.data.status === true) {
+        setLoading(false);
+        setProfile(res.data.user);
+      }
+    }
+    fetchUserData();
+  }, []);
+
   return (
     <Container className="sideNav">
       <nav className="side-navbar">
         <div className="avatar-box d-flex justify-content-center">
-          <Link to={`/${user.username}`} className="avatar">
-            <img src={`${host}/${user.image}`} alt="" />
-          </Link>
+          {loading ? (
+            <SkeletonCircle
+              width={40}
+              height={40}
+            />
+          ) : (
+            <Link to={`/${profile.username}`} className="avatar">
+              <img src={profile.image} alt="profilePic" />
+            </Link>
+          )}
         </div>
         <ul>
           <li>
             <NavLink to={"/"}>
-              <IoIosChatboxes />{" "}
+              <IoIosChatboxes />
+              <br />
+              <span>Chats</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/"}>
+            <NavLink to={"/group"}>
               <IoIosPeople />
+              <br />
+              <span>Group</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/settings"}>
+            <NavLink to={"/status"}>
               <RiChatHistoryFill />
+              <br />
+              <span>Status</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/"}>
+            <NavLink to={"/favourites"}>
               <BsStarFill />
+              <br />
+              <span>Favourites</span>
             </NavLink>
           </li>
         </ul>
@@ -52,7 +87,7 @@ const Container = styled.div`
   flex: 0 0 auto;
   width: 6.33333333%;
   padding: 10px;
-  background-color: var(--faded-primary-color);
+  background-color: var(--primary-color);
   flex-shrink: 0;
 
   .header {
@@ -60,7 +95,6 @@ const Container = styled.div`
   }
 
   .side-navbar {
-    background: var(--gradient);
     border-radius: 5px;
     width: 100%;
     height: 100%;
@@ -78,6 +112,17 @@ const Container = styled.div`
         display: flex;
         justify-content: center;
         border-radius: 5px;
+        a {
+          color: #eaeaeade;
+          line-height: 1.3;
+          text-align: center;
+          &:hover {
+            color: #fff;
+          }
+          span {
+            font-size: 10px;
+          }
+        }
       }
     }
   }
@@ -97,18 +142,6 @@ const Container = styled.div`
 
   .side-navbar li a.active {
     color: #fff;
-  }
-
-  /* .active a {
-    color: #fff;
-  } */
-
-  .side-navbar li a {
-    color: #eaeaeade;
-    line-height: 1.3;
-    &:hover {
-    color: #fff;
-    }
   }
 
   .contacts-info h3 {

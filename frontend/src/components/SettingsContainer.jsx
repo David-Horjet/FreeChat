@@ -154,7 +154,7 @@ function SettingsContainer({ user, switchTheme }) {
         >
           <div className="card p-4">
             <div className="border-0 pb-0">
-              <h1 className="h5 card-title">Account Settings</h1>
+              <h5 className="card-title">Account Settings</h5>
             </div>
             <div className="card-body">
               <form
@@ -298,24 +298,25 @@ const Container = styled.div`
   width: 93.66666667%;
 
   .body-card {
-    background-color: var(--primary-color);
+    background-color: var(--faded-primary-color);
     height: 100vh;
     overflow: auto;
   }
   .card-title {
     color: var(--secondary-color);
+    font-size: 18px;
   }
   form {
     label {
       color: var(--faded-secondary-color);
-      font-size: 15px;
+      font-size: 12px;
     }
     .form-control {
       background-color: transparent;
       border: 1px solid var(--faded-secondary-color);
       outline: none;
       color: var(--secondary-color);
-      font-size: 15px;
+      font-size: 12px;
     }
     &:focus {
       border: none;
@@ -326,6 +327,7 @@ const Container = styled.div`
       border: none;
       padding: 10px 20px;
       border-radius: 10px;
+      font-size: 12px;
     }
   }
   .danger-row {
@@ -334,13 +336,14 @@ const Container = styled.div`
       border: none;
       padding: 10px 20px;
       border-radius: 10px;
+      font-size: 12px;
       &:focus {
         outline: none;
         border: none;
       }
       svg {
         color: var(--secondary-color);
-        font-size: 30px;
+        font-size: 20px;
       }
     }
   }

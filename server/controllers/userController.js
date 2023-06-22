@@ -47,7 +47,7 @@ const getUser = async (req, res, next) => {
                } else {
                     return res.status(400).json({
                          status: false,
-                         msg: `Can't Find ${username}'s details`,
+                         msg: `Can't find user's details`,
                     });
                }
           } else {
