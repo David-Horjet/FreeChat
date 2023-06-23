@@ -38,8 +38,12 @@ function Settings({switchTheme}) {
         <div className="chat wrapper">
           <div className="chat-container">
             <div className="row">
-              <SideNav user={profile} loading={loading} />
-              <SettingsContainer switchTheme={switchTheme} user={profile} />
+              <SideNav />
+              <SettingsContainer
+                switchTheme={switchTheme}
+                user={profile}
+                loading={loading}
+              />
             </div>
           </div>
         </div>

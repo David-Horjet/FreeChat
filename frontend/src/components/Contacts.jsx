@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { BsFillGridFill, BsSearch } from "react-icons/bs";
 import Contact from "./Contact";
+import { SkeletonPlane } from "./Loaders/SkeletonLoader";
 
 function Contacts({ contacts, changeChat, user, isLoading }) {
+  console.log(user)
   const [currentSelected, setCurrentSelected] = useState(undefined);
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
@@ -33,12 +35,16 @@ return (
             <div className="card-head">
               <div className=" d-flex justify-content-between align-items-center">
                 <span className="mb-0">Chats</span>
-                <Link
-                  to={`/${user.username}`}
-                  className="dropend position-relative"
-                >
-                  <BsFillGridFill />
-                </Link>
+                {!user.username ? (
+                  <SkeletonPlane width={20} height={20} />
+                ) : (
+                  <Link
+                    to={`/${user.username}`}
+                    className="dropend position-relative"
+                  >
+                    <BsFillGridFill />
+                  </Link>
+                )}
               </div>
             </div>
             {/* <div className="head py-3">

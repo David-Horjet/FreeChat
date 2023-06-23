@@ -73,7 +73,7 @@ const updateUser = async (req, res) => {
           email,
           about
      } = req.body;
-     const user = req.body.user
+     const user = await Users.findOne({ username: req.user.username })
      const casedEmail = email.toLowerCase();
 
      const emailCheck = await Users.findOne({
@@ -100,7 +100,7 @@ const updateUser = async (req, res) => {
           })
      }
      try {
-          const updatedUser = await Users.findByIdAndUpdate(req.params.id, {
+          const updatedUser = await Users.findByIdAndUpdate(user._id, {
                $set: req.body
           });
           return res.json({

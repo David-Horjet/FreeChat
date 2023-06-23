@@ -25,7 +25,7 @@ function Contact({
   // }, []);
 
   const truncate = (input) =>
-    input?.length > 30 ? `${input.substring(0, 30)}...` : input;
+    input?.length > 40 ? `${input.substring(0, 40)}...` : input;
 
   if (isLoading) {
     let skelotonRows = [];

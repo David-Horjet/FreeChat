@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Context } from "../context/Context";
-import axios from "axios";
+import { authAxios } from "../utils/Axios";
 import LogoutWarning from "./Popups/LogoutWarning";
 import CloseAccountWarning from "./Popups/CloseAccountWarning";
 import RoundLoader from "../components/Loaders/RoundLoader";
 
-function SettingsContainer({ user, switchTheme }) {
+function SettingsContainer({ switchTheme }) {
   const navigate = useNavigate();
-  const { dispatch } = useContext(Context);
+  const { user } = useContext(Context);
 
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
@@ -48,8 +48,7 @@ function SettingsContainer({ user, switchTheme }) {
     try {
       if (handleValidation()) {
         setIsLoading(true);
-        const { data } = await axios.put(`${profileSettingRoute}/${user._id}`, {
-          user,
+        const { data } = await authAxios.put(`${profileSettingRoute}`, {
           username,
           email,
           about,
@@ -59,12 +58,9 @@ function SettingsContainer({ user, switchTheme }) {
           setIsLoading(false);
         }
         if (data.status === true) {
-          toast.success(
-            `${data.message}, You will need to log in again to authorize changes`,
-            toastOptions
-          );
+          toast.success(data.message, toastOptions);
           setTimeout(() => {
-            dispatch({ type: "LOGOUT" });
+            window.location.reload();
           }, 3000);
         }
       }
@@ -197,12 +193,12 @@ function SettingsContainer({ user, switchTheme }) {
                     >
                       Save changes
                     </button>
-                  ):(
+                  ) : (
                     <button
                       type="submit"
                       className="btn btn-sm btn-primary mb-0"
                     >
-                      <RoundLoader/>
+                      <RoundLoader />
                     </button>
                   )}
                 </div>
@@ -259,7 +255,7 @@ function SettingsContainer({ user, switchTheme }) {
                       type="submit"
                       className="btn btn-sm btn-primary mb-0"
                     >
-                      <RoundLoader/>
+                      <RoundLoader />
                     </button>
                   )}
                 </div>

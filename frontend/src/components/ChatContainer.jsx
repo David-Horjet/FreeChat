@@ -5,7 +5,6 @@ import { AiFillAudio } from "react-icons/ai";
 import ChatInput from "./ChatInput";
 import {
   getAllMessagesRoute,
-  host,
   sendMessageRoute,
 } from "../utils/APIRoutes";
 import axios from "axios";
@@ -14,7 +13,6 @@ import { BsArrowLeft, BsThreeDotsVertical } from "react-icons/bs";
 import { FaVideo } from "react-icons/fa";
 
 function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
-  const image = `${host}/${currentChat.image}`;
 
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -102,8 +100,8 @@ function ChatContainer({ currentChat, user, socket, setCurrentChat }) {
                       <div className="flex-shrink-0 avatar me-2">
                         <img
                           className="avatar-img rounded-circle"
-                          src={image}
-                          alt=""
+                          src={currentChat.image}
+                          alt="profile-pic"
                         />
                       </div>
                       <div className="d-block flex-grow-1">

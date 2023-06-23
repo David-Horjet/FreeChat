@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
-import { usersRoute, host } from "../utils/APIRoutes";
+import { usersRoute, host, userRoute } from "../utils/APIRoutes";
 import { io } from "socket.io-client";
 import SideNav from "../components/SideNav";
 import { Context } from "../context/Context";
@@ -28,6 +28,24 @@ function Chat() {
       socket.current.emit("add-user", user._id);
     }
   }, [user]);
+
+  const [profile, setProfile] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      setLoading(true);
+      const res = await authAxios.get(userRoute);
+      if (res.data.status === false) {
+        setLoading(false);
+      }
+      if (res.data.status === true) {
+        setLoading(false);
+        setProfile(res.data.user);
+      }
+    }
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     async function allUsers() {
@@ -61,10 +79,10 @@ function Chat() {
         <div className="chat wrapper">
           <div className="chat-container">
             <div className="row">
-              <SideNav user={user} />
+              <SideNav />
               <Contacts
                 contacts={contacts}
-                user={user}
+                user={profile}
                 changeChat={handleChatChange}
                 isLoading={isLoading}
               />
@@ -73,7 +91,7 @@ function Chat() {
               ) : (
                 <ChatContainer
                   currentChat={currentChat}
-                  user={user}
+                  user={profile}
                   socket={socket}
                   setCurrentChat={setCurrentChat}
                 />

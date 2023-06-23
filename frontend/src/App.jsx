@@ -41,7 +41,7 @@ function App() {
               path="/:username"
               element={token ? <Profile /> : <Login />}
             />
-            <Route path="/" element={token ? <Chat /> : <Login />} />
+            <Route exact path="/" element={token ? <Chat /> : <Login />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
