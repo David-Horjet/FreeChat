@@ -90,7 +90,7 @@ function ProfileContainer({ profile, user, loading }) {
                   {loading ? (
                     <SkeletonPlane width={100} height={10} />
                   ) : (
-                    <p>{profile.about}</p>
+                    <p className="text-center">{profile.about}</p>
                   )}
                 </div>
                 {loading ? (

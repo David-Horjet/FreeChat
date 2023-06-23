@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SideNav from "../components/SideNav";
 import ProfileContainer from "../components/ProfileContainer";
@@ -9,6 +9,8 @@ import { authAxios } from "../utils/Axios";
 
 function Profile() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const username = location.pathname.split("/")[1];
   const { user } = useContext(Context);
 
   const [profile, setProfile] = useState("");
@@ -21,7 +23,7 @@ function Profile() {
   useEffect(() => {
     async function fetchUserData() {
       setLoading(true)
-      const res = await authAxios.get(userRoute);
+      const res = await authAxios.get(`${userRoute}/${username}`);
       if(res.data.status === false) {
         setLoading(false)
         navigate("*")

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, NavLink } from "react-router-dom";
 import { userRoute } from "../utils/APIRoutes";
@@ -8,15 +8,17 @@ import { BsStarFill } from "react-icons/bs";
 import { RiChatHistoryFill } from "react-icons/ri";
 import { authAxios } from "../utils/Axios";
 import { SkeletonCircle } from "./Loaders/SkeletonLoader";
+import { Context } from "../context/Context";
 
 function SideNav() {
   const [profile, setProfile] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(Context);
 
   useEffect(() => {
     async function fetchUserData() {
       setLoading(true);
-      const res = await authAxios.get(userRoute);
+      const res = await authAxios.get(`${userRoute}/${user.username}`);
       if (res.data.status === false) {
         setLoading(false);
       }

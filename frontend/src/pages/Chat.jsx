@@ -35,7 +35,7 @@ function Chat() {
   useEffect(() => {
     async function fetchUserData() {
       setLoading(true);
-      const res = await authAxios.get(userRoute);
+      const res = await authAxios.get(`${userRoute}/${user.username}`);
       if (res.data.status === false) {
         setLoading(false);
       }

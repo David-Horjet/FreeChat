@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { host } from "../utils/APIRoutes";
 import { authAxios } from "../utils/Axios";
 import { SkeletonCircle, SkeletonPlane } from "./Loaders/SkeletonLoader";
 import { userRoute } from "../utils/APIRoutes";
+import { Context } from "../context/Context";
 
 function Welcome() {
   const [profile, setProfile] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  const { user } = useContext(Context);
 
   useEffect(() => {
     async function fetchUserData() {
       setLoading(true);
-      const res = await authAxios.get(userRoute);
+      const res = await authAxios.get(`${userRoute}/${user.username}`);
       if (res.data.status === false) {
         setLoading(false);
       }
