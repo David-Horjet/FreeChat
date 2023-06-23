@@ -59,6 +59,7 @@ function SettingsContainer({ switchTheme }) {
         }
         if (data.status === true) {
           toast.success(data.message, toastOptions);
+          
           setTimeout(() => {
             window.location.reload();
           }, 3000);

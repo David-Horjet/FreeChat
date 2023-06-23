@@ -25,7 +25,7 @@ function App() {
       <div className="app" data-theme={"dark"}>
         <BrowserRouter>
           <Routes>
-            <Route path="/register" element={token ? <Chat /> : <Register />} />
+            <Route path="/register" element={token  ? <Chat /> : <Register />} />
             <Route
               path="/setimage"
               element={token ? <SetImage /> : <Login />}

@@ -33,7 +33,7 @@ const idUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
      try {
-          const username = req.user.username;
+          const username = req.params.username;
           if (username) {
                const user = await Users.findOne({
                     username: username
