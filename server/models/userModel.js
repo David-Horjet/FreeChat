@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
      },
      image: {
           type: String,
-          default: "public/uploads/person-icon-svg-1.jpg",
+          default: "https://res.cloudinary.com/dvwvizxtz/image/upload/v1706501880/freechat/users/gddxmaiea68jggysyu5t.jpg",
      },
      about: {
           type: String,

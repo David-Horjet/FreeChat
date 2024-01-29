@@ -6,17 +6,16 @@ import Contact from "./Contact";
 import { SkeletonPlane } from "./Loaders/SkeletonLoader";
 
 function Contacts({ contacts, changeChat, user, isLoading }) {
-  console.log(user)
+  console.log(user);
   const [currentSelected, setCurrentSelected] = useState(undefined);
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
     changeChat(contact);
   };
-  const [searchText, setSearchText] = useState("")
+  const [searchText, setSearchText] = useState("");
   // const [filtered, setFiltered] = useState(contacts)
   // const [allContacts, setAllContacts] = useState(contacts)
   // console.log(filtered);
-
 
   // useEffect(() => {
   //   filterEntries()
@@ -26,28 +25,28 @@ function Contacts({ contacts, changeChat, user, isLoading }) {
   //   setFiltered(allContacts.filter((item) => item.firstName.toLowerCase().startsWith(searchText.toLowerCase())))
   // }
 
-return (
-  <>
-    <Container className="contacts-container">
-      <div className="contacts col-sm-12">
-        <nav className="navbar-expand-lg mx-0">
-          <div className="offcanvas offcanvas-start" id="offcanvasNavbar">
-            <div className="card-head">
-              <div className=" d-flex justify-content-between align-items-center">
-                <span className="mb-0">Chats</span>
-                {!user.username ? (
-                  <SkeletonPlane width={20} height={20} />
-                ) : (
-                  <Link
-                    to={`/${user.username}`}
-                    className="dropend position-relative"
-                  >
-                    <BsFillGridFill />
-                  </Link>
-                )}
+  return (
+    <>
+      <Container className="contacts-container">
+        <div className="contacts col-sm-12">
+          <nav className="navbar-expand-lg mx-0">
+            <div className="offcanvas offcanvas-start" id="offcanvasNavbar">
+              <div className="card-head">
+                <div className=" d-flex justify-content-between align-items-center">
+                  <span className="mb-0">Chats</span>
+                  {!user.username ? (
+                    <SkeletonPlane width={20} height={20} />
+                  ) : (
+                    <Link
+                      to={`/${user.username}`}
+                      className="dropend position-relative"
+                    >
+                      <BsFillGridFill />
+                    </Link>
+                  )}
+                </div>
               </div>
-            </div>
-            {/* <div className="head py-3">
+              {/* <div className="head py-3">
               <div className="position-relative">
                 <input
                   className="form-control py-2"
@@ -64,34 +63,35 @@ return (
                 </button>
               </div>
             </div> */}
-            <div className="offcanvas-body p-0">
-              <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
-                <div className="h-100 custom-scrollbar">
-                  <div className="chat-tab-list custom-scrollbar">
-                    <ul className="nav flex-column nav-pills nav-pills-soft">
-                      <Contact
-                        contacts={contacts}
-                        searchText={searchText}
-                        currentSelected={currentSelected}
-                        isLoading={isLoading}
-                        changeCurrentChat={changeCurrentChat}
-                      />
-                    </ul>
+              <div className="offcanvas-body p-0">
+                <div className="card card-chat-list rounded-end-lg-0 card-body rounded-top-0">
+                  <div className="h-100 custom-scrollbar">
+                    <div className="chat-tab-list custom-scrollbar">
+                      <ul className="nav flex-column nav-pills nav-pills-soft">
+                        <Contact
+                          contacts={contacts}
+                          searchText={searchText}
+                          currentSelected={currentSelected}
+                          isLoading={isLoading}
+                          changeCurrentChat={changeCurrentChat}
+                        />
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </nav>
-      </div>
-    </Container>
-  </>
-);
+          </nav>
+        </div>
+      </Container>
+    </>
+  );
 }
 
 const Container = styled.div`
   flex: 0 0 auto;
   width: 25%;
+  height: 100vh;
   .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
   }
@@ -219,8 +219,11 @@ const Container = styled.div`
   }
 
   .offcanvas-body {
-    height: 90vh;
+    height: 95vh;
     background-color: var(--faded-primary-color);
+    .custom-scrollbar {
+      overflow-y: auto;
+    }
     .navbar {
       height: 100%;
       padding: 0;

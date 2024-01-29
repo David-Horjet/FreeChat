@@ -188,6 +188,7 @@ const Container = styled.div`
   flex: 0 0 auto;
   width: 68.66666667%;
   background-color: var(--faded-primary-color);
+  height: 100vh;
 
   .card {
     height: 100%;
@@ -216,6 +217,8 @@ const Container = styled.div`
   }
 
   .chat-conversation-content {
+    height: 80vh;
+    overflow-y: auto;
     padding: 20px;
   }
 

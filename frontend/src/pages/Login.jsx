@@ -46,7 +46,7 @@ function Login() {
           dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user, token: res.data.token });
           toast.success(res.data.message, toastOptions);
           setTimeout(() => {
-            navigate("/");
+            window.location.pathname = "/";
           }, 2000);
         }
       }

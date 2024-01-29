@@ -106,7 +106,7 @@ function Chat() {
 
 const Container = styled.div`
   * {
-    overflow-x: hidden;
+    overflow: hidden;
   }
   l .chat {
     display: flex;

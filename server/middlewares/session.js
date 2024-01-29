@@ -1,5 +1,4 @@
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
 
 
 const newSession = session({
@@ -9,9 +8,6 @@ const newSession = session({
      cookies: {
           maxAge: 60000
      },
-     store: MongoStore.create({
-          mongoUrl: process.env.dbURI
-     })
 });
 
 module.exports = {

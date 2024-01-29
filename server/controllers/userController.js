@@ -58,11 +58,11 @@ const getUser = async (req, res, next) => {
           }
 
      } catch (error) {
+          console.log(error)
           return res.json({
                status: false,
                msg: `Internal server error occured`
           });
-          next()
      }
 }
 
